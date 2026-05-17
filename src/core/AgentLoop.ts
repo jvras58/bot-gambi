@@ -7,6 +7,7 @@ import { PerceptionManager } from '@/bot/PerceptionManager';
 import { MemoryManager } from '@/core/MemoryManager';
 import { DataLogger } from '@/core/DataLogger';
 import { GambiLLM } from '@/llm/GambiarraLLM';
+import { HubMetricsWatcher, type HubMetrics } from '@/llm/HubMetrics';
 import { botActionSchema } from '@/schemas/botAction';
 import { botPromptTemplate } from '@/prompts/botPrompts';
 import { sleep } from '@/utils/sleep';
@@ -21,6 +22,7 @@ export class AgentLoop {
   private perception: PerceptionManager | null = null;
   private memory: MemoryManager;
   private logger: DataLogger;
+  private hubWatcher: HubMetricsWatcher;
   private isRunning = false;
   private listenersAttached = false;
 
@@ -38,11 +40,17 @@ export class AgentLoop {
     participantId: string;
     participantNickname: string;
     modelName: string;
+    hubUrl: string;
   }) {
     this.botManager = botManager;
     this.llm = llm;
     this.memory = new MemoryManager();
     this.logger = new DataLogger();
+    this.hubWatcher = new HubMetricsWatcher({
+      hubUrl: options.hubUrl,
+      roomCode: options.roomCode,
+      participantId: options.participantId,
+    });
 
     this.sessionId = crypto.randomUUID();
     this.botUsername = options.botUsername;
@@ -68,6 +76,7 @@ export class AgentLoop {
       participant_id: this.participantId,
     });
 
+    this.hubWatcher.start();
     this.isRunning = true;
     this.loop();
   }
@@ -78,6 +87,7 @@ export class AgentLoop {
 
   async shutdown(): Promise<void> {
     this.stop();
+    this.hubWatcher.stop();
     await this.logger.shutdown(this.sessionId, this.cycleNumber);
   }
 
@@ -104,12 +114,16 @@ export class AgentLoop {
         // 3. LLM
         let llmResponse: LLMResponse | null = null;
         let llmError: string | null = null;
+        const requestAt = Date.now();
         try {
           llmResponse = await this.llm.invoke(messages);
         } catch (err) {
           llmError = err instanceof Error ? err.message : String(err);
           console.error(`❌ LLM erro: ${llmError}`);
         }
+
+        // 3b. Métricas hub-observed (medidas no hub, sem ruído de rede)
+        const hubMetrics = llmError ? null : await this.hubWatcher.metricsSince(requestAt);
 
         // 4. PARSE
         const { action, rawResponse, rawLength, jsonRepaired, parseError } = this.parseResponse(llmResponse);
@@ -121,7 +135,7 @@ export class AgentLoop {
           this.memory.recordEvent('LLM não retornou JSON válido');
 
           this.logCycle({
-            messages, gameCtx, llmResponse, llmError,
+            messages, gameCtx, llmResponse, llmError, hubMetrics,
             action: null, rawResponse, rawLength, jsonRepaired, parseError,
             actionResult: null,
           });
@@ -130,7 +144,21 @@ export class AgentLoop {
           continue;
         }
 
-        console.log(`✅ ${action!.acao} (${llmResponse!.responseTimeMs.toFixed(0)}ms)`);
+        const tps = llmResponse!.tokensPerSecond;
+        const ttft = llmResponse!.ttftMs;
+        const metricas = [
+          `${llmResponse!.responseTimeMs.toFixed(0)}ms`,
+          ttft != null ? `TTFT ${ttft.toFixed(0)}ms` : null,
+          tps != null ? `${tps.toFixed(1)} tok/s` : null,
+        ].filter(Boolean).join(', ');
+        console.log(`✅ ${action!.acao} (bot: ${metricas})`);
+        if (hubMetrics) {
+          const hubTps = hubMetrics.tokensPerSecond;
+          console.log(
+            `📡 Hub: ${hubMetrics.durationMs.toFixed(0)}ms, TTFT ${hubMetrics.ttftMs.toFixed(0)}ms` +
+              (hubTps != null ? `, ${hubTps.toFixed(1)} tok/s` : ''),
+          );
+        }
         if (action!.raciocinio) {
           console.log(`💭 ${action!.raciocinio}`);
         }
@@ -151,7 +179,7 @@ export class AgentLoop {
 
         // 7. LOG
         this.logCycle({
-          messages, gameCtx, llmResponse, llmError,
+          messages, gameCtx, llmResponse, llmError, hubMetrics,
           action, rawResponse, rawLength, jsonRepaired, parseError,
           actionResult,
         });
@@ -229,6 +257,7 @@ export class AgentLoop {
     gameCtx: GameContext;
     llmResponse: LLMResponse | null;
     llmError: string | null;
+    hubMetrics: HubMetrics | null;
     action: BotAction | null;
     rawResponse: string;
     rawLength: number;
@@ -248,6 +277,19 @@ export class AgentLoop {
       model_name: this.modelName,
 
       llm_response_time_ms: data.llmResponse?.responseTimeMs ?? null,
+      llm_ttft_ms: data.llmResponse?.ttftMs ?? null,
+      llm_input_tokens: data.llmResponse?.inputTokens ?? null,
+      llm_output_tokens: data.llmResponse?.outputTokens ?? null,
+      llm_total_tokens: data.llmResponse?.totalTokens ?? null,
+      llm_tokens_per_second: data.llmResponse?.tokensPerSecond ?? null,
+
+      hub_ttft_ms: data.hubMetrics?.ttftMs ?? null,
+      hub_duration_ms: data.hubMetrics?.durationMs ?? null,
+      hub_input_tokens: data.hubMetrics?.inputTokens ?? null,
+      hub_output_tokens: data.hubMetrics?.outputTokens ?? null,
+      hub_total_tokens: data.hubMetrics?.totalTokens ?? null,
+      hub_tokens_per_second: data.hubMetrics?.tokensPerSecond ?? null,
+
       llm_raw_length: data.rawLength || null,
       llm_json_repaired: data.jsonRepaired,
       llm_parse_error: data.parseError,

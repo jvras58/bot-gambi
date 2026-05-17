@@ -23,6 +23,13 @@ export class GambiLLM {
     this.participantId = options.participantId;
   }
 
+  /**
+   * Chamada não-streaming: o `usage` (contagem de tokens) vem garantido no
+   * corpo da resposta — padrão OpenAI-compatible suportado por todos os
+   * backends locais. Streaming traria TTFT separado, mas o `usage` no
+   * streaming é opcional e inconsistente entre backends — ver
+   * docs/metricas-streaming-vs-nao-streaming.md.
+   */
   async invoke(messages: ChatMessage[]): Promise<LLMResponse> {
     const { system, userMessages } = this.splitMessages(messages);
     const start = performance.now();
@@ -37,9 +44,22 @@ export class GambiLLM {
       this.timeout(agentConfig.llmTimeoutMs),
     ]);
 
+    const responseTimeMs = performance.now() - start;
+    const usage = result.usage;
+    const outputTokens = usage?.outputTokens ?? null;
+    const tokensPerSecond =
+      outputTokens != null && responseTimeMs > 0
+        ? outputTokens / (responseTimeMs / 1000)
+        : null;
+
     return {
-      content: (result as any).text,
-      responseTimeMs: performance.now() - start,
+      content: result.text,
+      responseTimeMs,
+      ttftMs: null,
+      inputTokens: usage?.inputTokens ?? null,
+      outputTokens,
+      totalTokens: usage?.totalTokens ?? null,
+      tokensPerSecond,
     };
   }
 

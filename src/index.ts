@@ -133,6 +133,7 @@ async function main(): Promise<void> {
     participantId: participant.id,
     participantNickname: participant.nickname,
     modelName: participant.model,
+    hubUrl,
   });
 
   // Graceful shutdown

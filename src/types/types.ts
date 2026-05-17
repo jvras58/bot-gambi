@@ -61,7 +61,15 @@ export interface ChatMessage {
 
 export interface LLMResponse {
   content: string;
+  /** Duração total da geração (ms). */
   responseTimeMs: number;
+  /** Time-to-first-token: tempo até o 1º token (ms). */
+  ttftMs: number | null;
+  inputTokens: number | null;
+  outputTokens: number | null;
+  totalTokens: number | null;
+  /** outputTokens / duração total (mesma fórmula do hub). */
+  tokensPerSecond: number | null;
 }
 
 // ─── Participante (usado no startup pra resolver --participant) ─
@@ -91,6 +99,19 @@ export interface CycleResponseData {
   model_name: string;
 
   llm_response_time_ms: number | null;
+  llm_ttft_ms: number | null;
+  llm_input_tokens: number | null;
+  llm_output_tokens: number | null;
+  llm_total_tokens: number | null;
+  llm_tokens_per_second: number | null;
+
+  hub_ttft_ms: number | null;
+  hub_duration_ms: number | null;
+  hub_input_tokens: number | null;
+  hub_output_tokens: number | null;
+  hub_total_tokens: number | null;
+  hub_tokens_per_second: number | null;
+
   llm_raw_length: number | null;
   llm_json_repaired: boolean;
   llm_parse_error: boolean;

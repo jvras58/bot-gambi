@@ -6,7 +6,7 @@
       "name": "minecraft-bot",
       "dependencies": {
         "ai": "^6.0.6",
-        "gambi-sdk": "^0.3.0",
+        "gambi-sdk": "0.6.0",
         "jsonrepair": "^3.12.0",
         "mineflayer": "^4.23.0",
         "mineflayer-collectblock": "^1.6.0",
@@ -100,7 +100,7 @@
 
     "follow-redirects": ["follow-redirects@1.15.11", "", {}, "sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ=="],
 
-    "gambi-sdk": ["gambi-sdk@0.3.0", "", { "dependencies": { "@ai-sdk/open-responses": "^1.0.6", "@ai-sdk/openai-compatible": "^2.0.2", "zod": "^4.3.5" }, "peerDependencies": { "ai": "^4 || ^5 || ^6", "typescript": "^5" } }, "sha512-yiE+7hXQy0g1aL9AYCWc56SNCS3vYu8SymZ2HODFc5UQ4sb1W1kTOPdEAejUWGglA2RAYy5Vyb7FiTFTVNqlRg=="],
+    "gambi-sdk": ["gambi-sdk@0.6.0", "", { "dependencies": { "@ai-sdk/open-responses": "^1.0.6", "@ai-sdk/openai-compatible": "^2.0.2", "zod": "^4.3.5" }, "peerDependencies": { "ai": "^4 || ^5 || ^6", "typescript": "^5" }, "optionalPeers": ["ai"] }, "sha512-UaZjRBbgKmPJnuW9dWbWDNBNrbDNW3ThZxrVapho9DskpvQwg4u19EaOyosa9/A4P3yxuPxaRCvKoI1+V3osIA=="],
 
     "ieee754": ["ieee754@1.2.1", "", {}, "sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA=="],
 
