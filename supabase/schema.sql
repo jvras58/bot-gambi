@@ -53,6 +53,22 @@ CREATE TABLE cycle_responses (
 
   -- ─── Resposta LLM ────────────────────────────────────────
   llm_response_time_ms numeric,
+
+  -- ─── Métricas de inferência — medidas no bot (AI SDK usage) ─
+  llm_ttft_ms numeric,            -- sempre NULL fora de streaming
+  llm_input_tokens integer,
+  llm_output_tokens integer,
+  llm_total_tokens integer,
+  llm_tokens_per_second numeric,
+
+  -- ─── Métricas de inferência — medidas no hub (evento SSE llm.complete) ─
+  hub_ttft_ms numeric,
+  hub_duration_ms numeric,
+  hub_input_tokens integer,
+  hub_output_tokens integer,
+  hub_total_tokens integer,
+  hub_tokens_per_second numeric,
+
   llm_raw_length integer,
   llm_json_repaired boolean DEFAULT false,
   llm_parse_error boolean DEFAULT false,
