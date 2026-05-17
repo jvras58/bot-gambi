@@ -1,5 +1,9 @@
 /** Ciclo de vida do bot mineflayer (conexão, eventos, reconexão). */
 import mineflayer, { type Bot } from 'mineflayer';
+import { pathfinder, Movements } from 'mineflayer-pathfinder';
+import { plugin as collectBlock } from 'mineflayer-collectblock';
+import { plugin as pvp } from 'mineflayer-pvp';
+import { plugin as tool } from 'mineflayer-tool';
 import type { BotConfig } from '@/types/types';
 
 export class BotManager {
@@ -21,6 +25,10 @@ export class BotManager {
   createBot(): void {
     console.log('🔌 Conectando ao servidor Minecraft...');
     this.bot = mineflayer.createBot(this.config);
+    this.bot.loadPlugin(pathfinder);
+    this.bot.loadPlugin(collectBlock);
+    this.bot.loadPlugin(pvp);
+    this.bot.loadPlugin(tool);
     this.setupEvents();
   }
 
@@ -37,6 +45,11 @@ export class BotManager {
 
     this.bot.on('spawn', () => {
       console.log('✅ Bot entrou no jogo!');
+      if (this.bot) {
+        const movements = new Movements(this.bot);
+        this.bot.pathfinder.setMovements(movements);
+        this.bot.collectBlock.movements = movements;
+      }
       this.connected = true;
       this.onConnected?.();
     });
@@ -75,6 +88,7 @@ export class BotManager {
     this.bot.on('physicsTick', () => {
       if (!this.bot || !this.isConnected()) return;
       if (!this.bot.entity.onGround) return;
+      if (this.bot.pathfinder.isMoving()) return;
 
       const walking =
         this.bot.controlState.forward ||

@@ -1,8 +1,17 @@
-/** Traduz BotAction em comandos mineflayer. */
+/** Traduz BotAction em comandos mineflayer (com pathfinder, collectblock, pvp). */
 import type { Bot } from 'mineflayer';
 import type { ActionResult } from '@/types/types';
 import type { BotAction } from '@/schemas/botAction';
 import { MovementManager } from '@/bot/MovementManager';
+
+/** Blocos comuns demais para serem alvo de COLETAR sem alvo explícito. */
+const BORING_BLOCKS = new Set([
+  'air', 'cave_air', 'void_air', 'stone', 'dirt', 'grass_block',
+  'bedrock', 'deepslate', 'water', 'lava', 'gravel', 'sand',
+]);
+
+/** Tempo máximo para ações que dependem de navegação (coletar/craftar). */
+const ACTION_TIMEOUT_MS = 30_000;
 
 export class ActionExecutor {
   private bot: Bot;
@@ -69,11 +78,16 @@ export class ActionExecutor {
           break;
 
         case 'COLETAR':
-          await this.coletarBlocoProximo(decisao.alvo);
+          await this.withTimeout(this.coletar(decisao.alvo));
+          break;
+
+        case 'CRAFTAR':
+          if (!decisao.alvo) throw new Error('Alvo (nome do item) obrigatório para CRAFTAR');
+          await this.withTimeout(this.craftar(decisao.alvo));
           break;
 
         case 'ATACAR':
-          await this.atacarEntidade(decisao.alvo);
+          this.atacar(decisao.alvo);
           break;
 
         case 'NADA':
@@ -94,6 +108,7 @@ export class ActionExecutor {
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`❌ Erro na ação ${decisao.acao}: ${msg}`);
+      this.cleanup();
       return {
         success: false,
         action: decisao.acao,
@@ -103,6 +118,21 @@ export class ActionExecutor {
         executionTimeMs: performance.now() - start,
       };
     }
+  }
+
+  /** Interrompe tarefas pendentes após erro/timeout. */
+  private cleanup(): void {
+    this.bot.collectBlock.cancelTask().catch(() => {});
+    this.movement.pararMovimento();
+  }
+
+  private withTimeout<T>(promise: Promise<T>): Promise<T> {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) =>
+        setTimeout(() => reject(new Error(`Timeout após ${ACTION_TIMEOUT_MS}ms`)), ACTION_TIMEOUT_MS),
+      ),
+    ]);
   }
 
   private olharAoRedor(): void {
@@ -122,45 +152,90 @@ export class ActionExecutor {
     }
   }
 
-  private async coletarBlocoProximo(alvo?: string): Promise<void> {
-    const botPos = this.bot.entity.position;
-
-    for (let r = 1; r <= 4; r++) {
-      for (let dx = -r; dx <= r; dx++) {
-        for (let dy = -2; dy <= 2; dy++) {
-          for (let dz = -r; dz <= r; dz++) {
-            try {
-              const block = this.bot.blockAt(botPos.offset(dx, dy, dz));
-              if (!block || block.name === 'air') continue;
-              if (alvo && !block.name.includes(alvo.toLowerCase())) continue;
-
-              await this.bot.dig(block);
-              console.log(`⛏️  Coletei ${block.name}`);
-              return;
-            } catch {
-              continue;
-            }
-          }
-        }
-      }
+  /** Encontra um bloco (até 32m), caminha até ele, equipa ferramenta e coleta o drop. */
+  private async coletar(alvo?: string): Promise<void> {
+    const ids = this.resolverBlocoIds(alvo);
+    if (ids.length === 0) {
+      throw new Error(`Nenhum tipo de bloco corresponde a "${alvo}"`);
     }
 
-    throw new Error(`Nenhum bloco ${alvo || ''} encontrado para coletar`);
+    const block = this.bot.findBlock({ matching: ids, maxDistance: 32 });
+    if (!block) {
+      throw new Error(`Nenhum bloco ${alvo ?? 'notável'} encontrado num raio de 32m`);
+    }
+
+    await this.bot.tool.equipForBlock(block, {});
+    await this.bot.collectBlock.collect(block);
+    console.log(`⛏️  Coletei ${block.name}`);
   }
 
-  private async atacarEntidade(alvo?: string): Promise<void> {
+  /**
+   * Resolve um nome (parcial) de bloco para os IDs numéricos correspondentes.
+   * Passar IDs ao findBlock mantém a busca otimizada por palette — um matcher
+   * como função varre milhões de blocos e congela o event loop.
+   */
+  private resolverBlocoIds(alvo?: string): number[] {
+    const target = alvo?.toLowerCase().trim().replace(/\s+/g, '_');
+    const blocks = this.bot.registry.blocksByName;
+    const ids: number[] = [];
+
+    for (const name of Object.keys(blocks)) {
+      if (target) {
+        if (!name.includes(target)) continue;
+      } else if (BORING_BLOCKS.has(name)) {
+        continue;
+      }
+      const def = blocks[name];
+      if (def) ids.push(def.id);
+    }
+
+    return ids;
+  }
+
+  /** Crafta um item pelo nome, usando bancada próxima se necessário. */
+  private async craftar(itemNome: string): Promise<void> {
+    const nome = itemNome.toLowerCase().trim().replace(/\s+/g, '_');
+    const itemDef = this.bot.registry.itemsByName[nome];
+    if (!itemDef) throw new Error(`Item desconhecido: ${itemNome}`);
+
+    let recipes = this.bot.recipesFor(itemDef.id, null, 1, null);
+    const tableId = this.bot.registry.blocksByName['crafting_table']?.id ?? null;
+    let table = tableId != null
+      ? this.bot.findBlock({ matching: tableId, maxDistance: 32 })
+      : null;
+
+    if (recipes.length === 0) {
+      if (!table) {
+        throw new Error(`${itemNome} precisa de uma bancada (crafting_table) e não há nenhuma por perto`);
+      }
+      await this.movement.irPara(table.position.x, table.position.y, table.position.z, 2);
+      recipes = this.bot.recipesFor(itemDef.id, null, 1, table);
+    } else {
+      table = null;
+    }
+
+    if (recipes.length === 0) {
+      throw new Error(`Sem ingredientes suficientes para craftar ${itemNome}`);
+    }
+
+    await this.bot.craft(recipes[0]!, 1, table ?? undefined);
+    console.log(`🔨 Craftei ${itemNome}`);
+  }
+
+  /** Inicia ataque contínuo (não-bloqueante) via plugin pvp. */
+  private atacar(alvo?: string): void {
     const entity = Object.values(this.bot.entities).find((e) => {
       if (e === this.bot.entity) return false;
-      if (!alvo) return e.type === 'mob';
-      const name = e.username || e.displayName || '';
+      if (!alvo) return e.type === 'mob' || e.type === 'hostile';
+      const name = e.name || e.username || e.displayName || '';
       return name.toLowerCase().includes(alvo.toLowerCase());
     });
 
-    if (entity) {
-      this.bot.attack(entity);
-      console.log(`⚔️  Ataquei ${entity.username || entity.displayName || 'entidade'}`);
-    } else {
-      throw new Error(`Nenhuma entidade ${alvo || ''} encontrada para atacar`);
+    if (!entity) {
+      throw new Error(`Nenhuma entidade ${alvo ?? ''} encontrada para atacar`);
     }
+
+    void this.bot.pvp.attack(entity).catch(() => {});
+    console.log(`⚔️  Atacando ${entity.name || entity.username || entity.displayName || 'entidade'}`);
   }
 }

@@ -7,7 +7,7 @@
 
 const VALID_ACTIONS = [
   'FALAR', 'ANDAR', 'PULAR', 'OLHAR', 'EXPLORAR',
-  'PARAR', 'NADA', 'SEGUIR', 'FUGIR', 'COLETAR', 'ATACAR',
+  'PARAR', 'NADA', 'SEGUIR', 'FUGIR', 'COLETAR', 'CRAFTAR', 'ATACAR',
 ] as const;
 
 const VALID_DIRECTIONS = ['frente', 'tras', 'esquerda', 'direita', 'aleatorio'] as const;
