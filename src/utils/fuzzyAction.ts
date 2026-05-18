@@ -74,6 +74,8 @@ export function normalizeAction(data: Record<string, unknown>): Record<string, u
     if (matched && matched !== result.direcao) {
       console.log(`      🔄 Direção corrigida: "${result.direcao}" → "${matched}"`);
       result.direcao = matched;
+    } else if (!matched) {
+      delete result.direcao;
     }
   }
 

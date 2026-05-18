@@ -30,7 +30,7 @@ AgentLoop (3s cycle)
 
 ```bash
 # 1. Join a Gambi room with your LLM
-gambi join --code ABC123 --model llama3
+gambi join --code ABC123 --model llama3.2:latest
 
 # 2. Run the bot (auto-detects participant)
 bun run dev -- --room ABC123

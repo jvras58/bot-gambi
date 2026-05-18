@@ -54,6 +54,21 @@ Cada bot a cada ciclo (~3s):
 * **Gambi Hub** rodando
 * **Supabase** (opcional, para coleta de dados)
 
+Instale o Bun antes de rodar `bun install`:
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+source ~/.zshrc
+bun --version
+```
+
+Se o `bun --version` ainda falhar no zsh, abra um novo terminal ou adicione manualmente isto ao `~/.zshrc`:
+
+```bash
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+```
+
 ## Setup
 
 ### 1. Hub Gambi + Participantes
@@ -68,7 +83,7 @@ gambi room create --name "Experimento 1"
 
 # Cada pessoa entra na sala com sua LLM:
 # PC1
-gambi participant join --room ABC123 --participant-id joao-1 --model llama3
+gambi participant join --room ABC123 --participant-id joao-1 --model llama3.2:latest
 
 # PC2
 gambi participant join --room ABC123 --participant-id jonh-2 --model mistral --endpoint http://localhost:1234
@@ -78,6 +93,8 @@ gambi participant join --room ABC123 --participant-id maria-3 --model qwen2
 
 ```
 > Link do gambi: https://www.gambi.sh/guides/quickstart/
+
+Use em `--model` o nome exato retornado por `ollama list`. Por exemplo, se o Ollama mostrar `llama3.2:latest`, `--model llama3` vai falhar com `Model 'llama3' not found`.
 
 O `gambi participant join` compartilha automaticamente as specs da máquina (CPU, RAM, GPU). O `participant-id` informado será utilizado automaticamente como o nome do seu bot dentro do servidor de Minecraft.
 
@@ -98,21 +115,37 @@ cp .env.example .env
 # Edite .env com SUPABASE_URL e SUPABASE_ANON_KEY
 
 bun install
-bun run dev -- --room ABC123
+bun run start -- --room ABC123
 
+```
+
+Para rodar tudo local em um comando (hub + sala + participante + bot), use:
+
+```bash
+bun run local -- --participant-id joao-1 --model llama3.2:latest
+```
+
+Esse comando cria a sala, captura automaticamente o código gerado e reaproveita o mesmo código no `gambi participant join` e no `bun run start`.
+Enquanto ele roda, o uso de RAM/VRAM e os maiores processos são gravados em `.tmp/memory.log`.
+Por padrão, ele usa `LOW_MEMORY_MODE=true`, que evita cache de chunks e pathfinder para reduzir uso de RAM.
+
+Para acompanhar em outro terminal:
+
+```bash
+tail -f .tmp/memory.log
 ```
 
 O bot auto-detecta qual participante usar (o que tá rodando na mesma máquina via `gambi join`) e entra no jogo com esse nome. Se tiver ambiguidade, especifique:
 
 ```bash
-bun run dev -- --room ABC123 --participant meu-pc
+bun run start -- --room ABC123 --participant meu-pc
 
 ```
 
 ## CLI
 
 ```
-bun run dev -- --room <ROOM_CODE> [opções]
+bun run start -- --room <ROOM_CODE> [opções]
 
 Opções:
   --room, -r <code>          Código da sala Gambi (obrigatório)
@@ -208,8 +241,8 @@ src/
    Sala: ABC123
    Hub:  http://localhost:3000
 
-🔍 Auto-detectado: joao-1 (llama3)
-✅ Participante: joao-1 — llama3 (GPU: NVIDIA RTX 4090, RAM: 32GB)
+🔍 Auto-detectado: joao-1 (llama3.2:latest)
+✅ Participante: joao-1 — llama3.2:latest (GPU: NVIDIA RTX 4090, RAM: 32GB)
 
 🧠 Agente ativado — Conectando no Minecraft como [joao-1]
 📊 Session ID: a1b2c3d4-...
