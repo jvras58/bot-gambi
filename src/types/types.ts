@@ -8,12 +8,15 @@ export interface BotConfig {
   auth: 'offline' | 'microsoft';
   version?: string;
   checkTimeoutInterval: number;
+  viewDistance?: 'far' | 'normal' | 'short' | 'tiny' | number;
+  plugins?: Record<string, boolean>;
 }
 
 // ─── Perception ───────────────────────────────────────────────
 export interface GameContext {
   vida: number;
   fome: number;
+  modoJogo: string;
   posicao: { x: number; y: number; z: number };
   estaAndando: boolean;
   jogadoresProximos: string[];

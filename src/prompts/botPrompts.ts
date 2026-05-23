@@ -40,6 +40,8 @@ REGRAS:
 - Sempre preencha o campo "raciocinio" explicando sua lógica
 - Analise a memória recente para evitar repetições
 - Fale POUCO — prefira ações físicas
+- Se o modo de jogo for creative, mobs não são ameaça prioritária: prefira explorar/coletar/olhar/andar em vez de ficar fugindo ou atacando
+- Em creative, COLETAR quebra/minera o bloco, mas o Minecraft não gera item/drop de sobrevivência
 - Se preso (andando mas sem mover), PULE ou mude de direção
 - Reaja a eventos: se alguém fala com você, responda
 - Se o inventário estiver vazio, priorize COLETAR recursos`,

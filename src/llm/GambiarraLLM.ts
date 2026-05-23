@@ -33,34 +33,49 @@ export class GambiLLM {
   async invoke(messages: ChatMessage[]): Promise<LLMResponse> {
     const { system, userMessages } = this.splitMessages(messages);
     const start = performance.now();
+    const abortController = new AbortController();
+    let timedOut = false;
+    const timeoutId = setTimeout(() => {
+      timedOut = true;
+      abortController.abort();
+    }, agentConfig.llmTimeoutMs);
 
-    const result = await Promise.race([
-      generateText({
+    try {
+      const result = await generateText({
         model: this.provider.participant(this.participantId),
         system,
         messages: userMessages,
         temperature: 0.8,
-      }),
-      this.timeout(agentConfig.llmTimeoutMs),
-    ]);
+        maxOutputTokens: agentConfig.llmMaxOutputTokens,
+        abortSignal: abortController.signal,
+        timeout: agentConfig.llmTimeoutMs,
+      });
 
-    const responseTimeMs = performance.now() - start;
-    const usage = result.usage;
-    const outputTokens = usage?.outputTokens ?? null;
-    const tokensPerSecond =
-      outputTokens != null && responseTimeMs > 0
-        ? outputTokens / (responseTimeMs / 1000)
-        : null;
+      const responseTimeMs = performance.now() - start;
+      const usage = result.usage;
+      const outputTokens = usage?.outputTokens ?? null;
+      const tokensPerSecond =
+        outputTokens != null && responseTimeMs > 0
+          ? outputTokens / (responseTimeMs / 1000)
+          : null;
 
-    return {
-      content: result.text,
-      responseTimeMs,
-      ttftMs: null,
-      inputTokens: usage?.inputTokens ?? null,
-      outputTokens,
-      totalTokens: usage?.totalTokens ?? null,
-      tokensPerSecond,
-    };
+      return {
+        content: result.text,
+        responseTimeMs,
+        ttftMs: null,
+        inputTokens: usage?.inputTokens ?? null,
+        outputTokens,
+        totalTokens: usage?.totalTokens ?? null,
+        tokensPerSecond,
+      };
+    } catch (err) {
+      if (timedOut) {
+        throw new Error(`Timeout após ${agentConfig.llmTimeoutMs}ms`);
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
 
   async getOnlineParticipants(): Promise<OnlineParticipant[]> {
@@ -105,9 +120,4 @@ export class GambiLLM {
     };
   }
 
-  private timeout(ms: number): Promise<never> {
-    return new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`Timeout após ${ms}ms`)), ms),
-    );
-  }
 }

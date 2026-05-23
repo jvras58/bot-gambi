@@ -3,6 +3,7 @@ import type { OnlineParticipant, CycleResponseData } from '@/types/types';
 
 const BATCH_SIZE = 20;
 const FLUSH_INTERVAL_MS = 15_000;
+const MAX_BUFFER_SIZE = 500;
 
 export class DataLogger {
   private supabaseUrl: string | null;
@@ -10,6 +11,7 @@ export class DataLogger {
   private buffer: CycleResponseData[] = [];
   private flushTimer: ReturnType<typeof setInterval> | null = null;
   private enabled: boolean;
+  private isFlushing = false;
 
   constructor() {
     this.supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, '') || null;
@@ -65,22 +67,31 @@ export class DataLogger {
   log(data: CycleResponseData): void {
     if (!this.enabled) return;
     this.buffer.push(data);
+    this.trimBuffer();
 
     if (this.buffer.length >= BATCH_SIZE) {
-      this.flush();
+      void this.flush();
     }
   }
 
-  flush(): void {
-    if (!this.enabled || this.buffer.length === 0) return;
+  async flush(): Promise<void> {
+    if (!this.enabled || this.buffer.length === 0 || this.isFlushing) return;
 
-    const batch = this.buffer.splice(0);
-    this.insert('cycle_responses', batch).catch((err) => {
+    this.isFlushing = true;
+    const batch = this.buffer.splice(0, BATCH_SIZE);
+    let sent = false;
+    try {
+      await this.insert('cycle_responses', batch);
+      sent = true;
+    } catch (err) {
       console.warn(`📊 Falha ao enviar ${batch.length} registros — ${err instanceof Error ? err.message : err}`);
-      if (this.buffer.length < 500) {
-        this.buffer.unshift(...batch);
+      this.requeueBatch(batch);
+    } finally {
+      this.isFlushing = false;
+      if (sent && this.buffer.length >= BATCH_SIZE) {
+        void this.flush();
       }
-    });
+    }
   }
 
   async endSession(sessionId: string, totalCycles: number): Promise<void> {
@@ -145,5 +156,16 @@ export class DataLogger {
 
   private patch<T extends object>(table: string, filter: string, data: T) {
     return this.request('PATCH', table, data, filter);
+  }
+
+  private requeueBatch(batch: CycleResponseData[]): void {
+    const capacity = MAX_BUFFER_SIZE - this.buffer.length;
+    if (capacity <= 0) return;
+    this.buffer.unshift(...batch.slice(-capacity));
+  }
+
+  private trimBuffer(): void {
+    if (this.buffer.length <= MAX_BUFFER_SIZE) return;
+    this.buffer.splice(0, this.buffer.length - MAX_BUFFER_SIZE);
   }
 }

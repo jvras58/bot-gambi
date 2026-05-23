@@ -33,6 +33,9 @@ export class AgentLoop {
   private participantNickname: string;
   private modelName: string;
   private cycleNumber = 0;
+  private lastActionName: string | null = null;
+  private consecutiveActionCount = 0;
+  private forcedVarietyIndex = 0;
 
   constructor(botManager: BotManager, llm: GambiLLM, options: {
     roomCode: string;
@@ -126,7 +129,7 @@ export class AgentLoop {
         const hubMetrics = llmError ? null : await this.hubWatcher.metricsSince(requestAt);
 
         // 4. PARSE
-        const { action, rawResponse, rawLength, jsonRepaired, parseError } = this.parseResponse(llmResponse);
+        let { action, rawResponse, rawLength, jsonRepaired, parseError } = this.parseResponse(llmResponse);
 
         if (llmError || parseError) {
           console.warn('⚠️  Resposta inválida — fallback EXPLORAR');
@@ -139,10 +142,13 @@ export class AgentLoop {
             action: null, rawResponse, rawLength, jsonRepaired, parseError,
             actionResult: null,
           });
+          this.logRuntimeDiagnostics();
 
           await sleep(agentConfig.loopIntervalMs);
           continue;
         }
+
+        action = this.enforceActionVariety(action!, gameCtx);
 
         const tps = llmResponse!.tokensPerSecond;
         const ttft = llmResponse!.ttftMs;
@@ -183,6 +189,10 @@ export class AgentLoop {
           action, rawResponse, rawLength, jsonRepaired, parseError,
           actionResult,
         });
+        if (agentConfig.pruneWorldCache) {
+          this.botManager.pruneWorldCache();
+        }
+        this.logRuntimeDiagnostics();
 
         await sleep(agentConfig.loopIntervalMs);
       } catch (err) {
@@ -195,15 +205,33 @@ export class AgentLoop {
   // ─── Construção do Prompt ────────────────────────────────
 
   private buildMessages(contexto: string): ChatMessage[] {
-    const humanMsg = botPromptTemplate.human
+    let humanMsg = botPromptTemplate.human
       .replace('{contexto}', contexto)
       .replace('{memoria}', this.memory.toPromptString())
       .replace('{contadorAcoes}', JSON.stringify(this.memory.getActionCounts()));
+
+    if (agentConfig.lowMemoryMode) {
+      humanMsg += `
+
+MODO LEVE DE MEMÓRIA:
+- Use apenas: ANDAR, EXPLORAR, PULAR, OLHAR, FALAR, PARAR, NADA.
+- Não use COLETAR, CRAFTAR, SEGUIR, FUGIR ou ATACAR neste modo.`;
+    }
 
     return [
       { role: 'system', content: botPromptTemplate.system },
       { role: 'user', content: humanMsg },
     ];
+  }
+
+  private logRuntimeDiagnostics(): void {
+    const mem = process.memoryUsage();
+    const diag = this.botManager.getDiagnostics();
+    console.log(
+      `🧪 Mem: RSS ${(mem.rss / 1024 / 1024).toFixed(0)} MB, ` +
+        `heap ${(mem.heapUsed / 1024 / 1024).toFixed(0)}/${(mem.heapTotal / 1024 / 1024).toFixed(0)} MB, ` +
+        `chunks ${diag.chunks}, entidades ${diag.entities}, jogadores ${diag.players}, pos ${diag.pos}`,
+    );
   }
 
   // ─── Parse de Resposta ───────────────────────────────────
@@ -248,6 +276,46 @@ export class AgentLoop {
         parseError: true,
       };
     }
+  }
+
+  private enforceActionVariety(action: BotAction, gameCtx: GameContext): BotAction {
+    const nextCount = this.lastActionName === action.acao
+      ? this.consecutiveActionCount + 1
+      : 1;
+
+    if (nextCount <= 2) {
+      this.lastActionName = action.acao;
+      this.consecutiveActionCount = nextCount;
+      return action;
+    }
+
+    const alternatives = this.varietyAlternatives(action.acao, gameCtx);
+    const forced = alternatives[this.forcedVarietyIndex % alternatives.length]!;
+    this.forcedVarietyIndex++;
+    this.lastActionName = forced.acao;
+    this.consecutiveActionCount = 1;
+    console.warn(`🔁 Variedade: troquei ${action.acao} repetido por ${forced.acao}`);
+    return forced;
+  }
+
+  private varietyAlternatives(repeatedAction: string, gameCtx: GameContext): BotAction[] {
+    const player = gameCtx.jogadoresProximos[0];
+    const options: BotAction[] = [
+      { raciocinio: 'Evitar repetição: coletar um bloco próximo.', acao: 'COLETAR' },
+      { raciocinio: 'Evitar repetição: observar o ambiente.', acao: 'OLHAR' },
+      { raciocinio: 'Evitar repetição: mover em outra direção.', acao: 'ANDAR', direcao: 'aleatorio' },
+      { raciocinio: 'Evitar repetição: parar e reavaliar.', acao: 'PARAR' },
+    ];
+
+    if (player) {
+      options.push({
+        raciocinio: 'Evitar repetição: interagir com jogador próximo.',
+        acao: 'FALAR',
+        conteudo: `Oi, ${player}!`,
+      });
+    }
+
+    return options.filter((option) => option.acao !== repeatedAction);
   }
 
   // ─── Log do Ciclo ────────────────────────────────────────

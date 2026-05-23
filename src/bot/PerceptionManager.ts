@@ -24,6 +24,7 @@ export class PerceptionManager {
     return {
       vida: this.bot.health,
       fome: this.bot.food,
+      modoJogo: this.bot.game.gameMode,
       posicao: {
         x: Math.round(this.bot.entity.position.x),
         y: Math.round(this.bot.entity.position.y),
@@ -45,6 +46,7 @@ export class PerceptionManager {
 
     const parts = [
       `Vida: ${ctx.vida.toFixed(0)}/20 | Fome: ${ctx.fome}/20`,
+      `Modo de jogo: ${ctx.modoJogo}`,
       `Posição: X=${ctx.posicao.x} Y=${ctx.posicao.y} Z=${ctx.posicao.z}`,
       `Bioma: ${ctx.bioma} | Clima: ${ctx.clima} | Hora: ${ctx.horaDoDia}`,
       `Andando: ${ctx.estaAndando ? 'SIM' : 'NÃO'}`,
@@ -117,6 +119,10 @@ export class PerceptionManager {
   }
 
   private getNearbyBlocks(): BlockInfo[] {
+    if (!('findBlocks' in this.bot) || typeof this.bot.findBlocks !== 'function') {
+      return [];
+    }
+
     const botPos = this.bot.entity.position;
     const r = agentConfig.perceptionBlockRadius;
 
@@ -154,6 +160,9 @@ export class PerceptionManager {
 
   private getBiome(): string {
     try {
+      if (!('blockAt' in this.bot) || typeof this.bot.blockAt !== 'function') {
+        return 'desconhecido';
+      }
       const pos = this.bot.entity.position;
       const block = this.bot.blockAt(pos);
       return (block as any)?.biome?.name ?? 'desconhecido';

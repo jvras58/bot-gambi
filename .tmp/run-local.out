@@ -1,0 +1,7 @@
+
+== Gambi local ==
+Hub:          http://localhost:3000
+Sala:         Experimento 1
+Participante: arthur-1
+Modelo:       llama3.2:latest
+

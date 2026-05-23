@@ -16,7 +16,7 @@ Cada instância controla 1 bot no Minecraft usando 1 LLM participante.
 Métricas são coletadas no Supabase para análise comparativa.
 
 Uso:
-  bun run dev -- --room <ROOM_CODE> [opções]
+  bun run start -- --room <ROOM_CODE> [opções]
 
 Opções:
   --room, -r <code>          Código da sala Gambi (obrigatório)
@@ -25,9 +25,9 @@ Opções:
   --help, -h                 Mostra esta ajuda
 
 Exemplo:
-  bun run dev -- --room ABC123
-  bun run dev -- --room ABC123 -p meu-pc
-  bun run dev -- --room ABC123 --hub http://192.168.1.10:3000
+  bun run start -- --room ABC123
+  bun run start -- --room ABC123 -p meu-pc
+  bun run start -- --room ABC123 --hub http://192.168.1.10:3000
 
 Variáveis de ambiente:
   SUPABASE_URL         URL do projeto Supabase (para coleta de dados)
@@ -120,9 +120,10 @@ async function main(): Promise<void> {
   // Registra snapshot do participante
   const logger = new DataLogger();
   await logger.logParticipantSnapshot(crypto.randomUUID(), participant);
+  await logger.shutdown();
 
   // Inicializa bot Minecraft
-    const botConfigWithParticipant: typeof botConfig = {
+  const botConfigWithParticipant: typeof botConfig = {
     ...botConfig,
     username: participant.id,
   };
@@ -137,13 +138,16 @@ async function main(): Promise<void> {
   });
 
   // Graceful shutdown
-  const shutdown = async () => {
+  let shuttingDown = false;
+  const shutdown = async (exitCode = 0) => {
+    if (shuttingDown) return;
+    shuttingDown = true;
     console.log('\n🛑 Encerrando...');
     await agent.shutdown();
-    process.exit(0);
+    process.exit(exitCode);
   };
-  process.on('SIGINT', () => { shutdown(); });
-  process.on('SIGTERM', () => { shutdown(); });
+  process.on('SIGINT', () => { void shutdown(); });
+  process.on('SIGTERM', () => { void shutdown(); });
 
   // Conecta e inicia
   botManager.createBot();

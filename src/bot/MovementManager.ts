@@ -22,7 +22,19 @@ export class MovementManager {
   /** Navega até uma posição usando pathfinder e espera chegar. */
   async irPara(x: number, y: number, z: number, range = 1): Promise<void> {
     this.pararMovimento();
+    if (!this.hasPathfinder()) {
+      throw new Error('Pathfinder desativado no modo leve');
+    }
     await this.bot.pathfinder.goto(new goals.GoalNear(x, y, z, range));
+  }
+
+  /** Navega ate ficar exatamente dentro do bloco alvo, util para pegar drops. */
+  async irParaBloco(x: number, y: number, z: number): Promise<void> {
+    this.pararMovimento();
+    if (!this.hasPathfinder()) {
+      throw new Error('Pathfinder desativado no modo leve');
+    }
+    await this.bot.pathfinder.goto(new goals.GoalBlock(x, y, z));
   }
 
   /** Andar manualmente numa direção curta (movimento reativo, sem destino). */
@@ -42,6 +54,11 @@ export class MovementManager {
   /** Explora caminhando até um ponto aleatório distante via pathfinder. */
   explorarAleatorio(): void {
     this.pararMovimento();
+    if (!this.hasPathfinder()) {
+      this.andarNaDirecao('aleatorio');
+      return;
+    }
+
     const pos = this.bot.entity.position;
     const angle = Math.random() * Math.PI * 2;
     const dist = 20 + Math.random() * 20;
@@ -55,14 +72,31 @@ export class MovementManager {
     const player = this.bot.players[nome];
     if (!player?.entity) throw new Error(`Jogador ${nome} não encontrado ou fora do alcance`);
 
+    if (!this.hasPathfinder()) {
+      this.bot.lookAt(player.entity.position.offset(0, 1.6, 0));
+      this.bot.setControlState('forward', true);
+      this.autoStop(2500);
+      return;
+    }
+
     this.bot.pathfinder.setGoal(new goals.GoalFollow(player.entity, 2), true);
   }
 
   fugirDeEntidade(nome: string): void {
     this.pararMovimento();
 
+    const target = this.normalizeEntityTarget(nome);
     const entity = Object.values(this.bot.entities).find(
-      (e) => e.username === nome || e.displayName === nome || `entity_${e.id}` === nome,
+      (e) => {
+        const names = [
+          e.username,
+          e.displayName,
+          e.name,
+          `entity_${e.id}`,
+        ].filter(Boolean).map((value) => this.normalizeEntityTarget(String(value)));
+
+        return names.some((name) => name === target || name.includes(target) || target.includes(name));
+      },
     );
 
     if (!entity) throw new Error(`Entidade ${nome} não encontrada`);
@@ -83,7 +117,7 @@ export class MovementManager {
       this.moveTimeout = null;
     }
     try {
-      this.bot.pathfinder.setGoal(null);
+      if (this.hasPathfinder()) this.bot.pathfinder.setGoal(null);
     } catch {
       // pathfinder ainda não inicializado — ignora
     }
@@ -99,5 +133,19 @@ export class MovementManager {
 
   private autoStop(ms: number): void {
     this.moveTimeout = setTimeout(() => this.pararMovimento(), ms);
+  }
+
+  private hasPathfinder(): boolean {
+    return !!(this.bot as unknown as { pathfinder?: unknown }).pathfinder;
+  }
+
+  private normalizeEntityTarget(value: string): string {
+    const normalized = value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    if (normalized.includes('skele')) return 'skeleton';
+    if (normalized.includes('creep')) return 'creeper';
+    if (normalized.includes('zomb') || normalized.includes('zumbi')) return 'zombie';
+    if (normalized.includes('spider') || normalized.includes('aranha')) return 'spider';
+    if (normalized.includes('bat') || normalized.includes('morcego')) return 'bat';
+    return normalized;
   }
 }
