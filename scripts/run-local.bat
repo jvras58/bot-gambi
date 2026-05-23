@@ -5,6 +5,7 @@ rem cd para a raiz do projeto (pasta acima de scripts)
 cd /d "%~dp0.."
 
 set "ROOM_NAME=Experimento 1"
+set "ROOM_CODE_ARG="
 set "HUB_PORT=3000"
 set "HUB_URL="
 set "PARTICIPANT_ID=%GAMBIARRA_PARTICIPANT_ID%"
@@ -17,6 +18,8 @@ if /i "%~1"=="--participant-id" ( set "PARTICIPANT_ID=%~2" & shift & shift & got
 if /i "%~1"=="-p"               ( set "PARTICIPANT_ID=%~2" & shift & shift & goto parse_args )
 if /i "%~1"=="--model"          ( set "MODEL=%~2"          & shift & shift & goto parse_args )
 if /i "%~1"=="-m"               ( set "MODEL=%~2"          & shift & shift & goto parse_args )
+if /i "%~1"=="--room"           ( set "ROOM_CODE_ARG=%~2"  & shift & shift & goto parse_args )
+if /i "%~1"=="-r"               ( set "ROOM_CODE_ARG=%~2"  & shift & shift & goto parse_args )
 if /i "%~1"=="--name"           ( set "ROOM_NAME=%~2"      & shift & shift & goto parse_args )
 if /i "%~1"=="-n"               ( set "ROOM_NAME=%~2"      & shift & shift & goto parse_args )
 if /i "%~1"=="--hub-port"       ( set "HUB_PORT=%~2"       & shift & shift & goto parse_args )
@@ -114,6 +117,12 @@ if errorlevel 1 (
 )
 :hub_ready
 
+if "%ROOM_CODE_ARG%"=="" goto create_room
+set "ROOM_CODE=%ROOM_CODE_ARG%"
+echo Usando sala existente: %ROOM_CODE%
+goto room_ready
+
+:create_room
 echo Criando sala...
 gambi room create --hub "%HUB_URL%" --name "%ROOM_NAME%" --format json > ".tmp\room.json"
 for /f "usebackq delims=" %%C in (`powershell -NoProfile -Command "$j=Get-Content -Raw '.tmp\room.json'; $q=[char]34; if ($j -match ($q+'code'+$q+'\s*:\s*'+$q+'([^'+$q+']+)'+$q)) { $matches[1] }"`) do set "ROOM_CODE=%%C"
@@ -125,6 +134,7 @@ if "%ROOM_CODE%"=="" (
 )
 
 echo Sala criada: %ROOM_CODE%
+:room_ready
 
 echo Monitorando memoria em %MEMORY_LOG%
 for /f "delims=" %%P in ('powershell -NoProfile -Command "(Start-Process -FilePath cmd.exe -ArgumentList '/c',([char]34+'%~dp0watch-memory.bat'+[char]34+' 2 '+[char]34+'%MEMORY_LOG%'+[char]34) -WindowStyle Hidden -PassThru).Id"') do set "MEMORY_PID=%%P"
@@ -174,12 +184,16 @@ echo.
 echo Opcoes:
 echo   --participant-id, -p  ID/nome do participante e do bot no Minecraft
 echo   --model, -m           Nome exato do modelo, igual aparece no `ollama list`
-echo   --name, -n            Nome da sala (default: "Experimento 1")
+echo   --room, -r            Codigo de uma sala existente (entra nela em vez de criar)
+echo   --name, -n            Nome da sala nova (default: "Experimento 1")
 echo   --hub-port            Porta do hub local (default: 3000)
 echo   --hub                 URL do hub (default: http://localhost:^<hub-port^>)
 echo   --no-mdns             Inicia o hub sem --mdns
 echo   --help, -h            Mostra esta ajuda
 echo.
-echo Exemplo:
-echo   bun run local -- -p joao-1 -m llama3.2:latest
+echo Exemplo (host, cria sala nova):
+echo   scripts\run-local.bat -p joao-1 -m llama3.2:latest
+echo.
+echo Exemplo (participante, entra na sala do host):
+echo   scripts\run-local.bat -p maria-3 -m qwen2 --hub http://192.168.0.10:3000 --room ABC123
 exit /b 0

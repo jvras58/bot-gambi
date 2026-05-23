@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 ROOM_NAME="Experimento 1"
+ROOM_CODE_ARG=""
 HUB_PORT="3000"
 HUB_URL=""
 PARTICIPANT_ID="${GAMBIARRA_PARTICIPANT_ID:-}"
@@ -18,14 +19,18 @@ Uso:
 Opcoes:
   --participant-id, -p  ID/nome do participante e do bot no Minecraft
   --model, -m           Nome exato do modelo, igual aparece no `ollama list`
-  --name, -n            Nome da sala (default: "Experimento 1")
+  --room, -r            Codigo de uma sala existente (entra nela em vez de criar)
+  --name, -n            Nome da sala nova (default: "Experimento 1")
   --hub-port            Porta do hub local (default: 3000)
   --hub                 URL do hub (default: http://localhost:<hub-port>)
   --no-mdns             Inicia o hub sem --mdns
   --help, -h            Mostra esta ajuda
 
-Exemplo:
+Exemplo (host, cria sala nova):
   bun run local -- -p joao-1 -m llama3.2:latest
+
+Exemplo (participante, entra na sala do host):
+  bun run local -- -p maria-3 -m qwen2 --hub http://192.168.0.10:3000 --room ABC123
 EOF
 }
 
@@ -37,6 +42,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --model|-m)
       MODEL="${2:-}"
+      shift 2
+      ;;
+    --room|-r)
+      ROOM_CODE_ARG="${2:-}"
       shift 2
       ;;
     --name|-n)
@@ -182,17 +191,22 @@ else
   fi
 fi
 
-echo "Criando sala..."
-ROOM_JSON="$(gambi room create --hub "$HUB_URL" --name "$ROOM_NAME" --format json)"
-ROOM_CODE="$(printf '%s' "$ROOM_JSON" | extract_room_code)"
+if [[ -n "$ROOM_CODE_ARG" ]]; then
+  ROOM_CODE="$ROOM_CODE_ARG"
+  echo "Usando sala existente: $ROOM_CODE"
+else
+  echo "Criando sala..."
+  ROOM_JSON="$(gambi room create --hub "$HUB_URL" --name "$ROOM_NAME" --format json)"
+  ROOM_CODE="$(printf '%s' "$ROOM_JSON" | extract_room_code)"
 
-if [[ -z "$ROOM_CODE" || "$ROOM_CODE" == "$ROOM_JSON" ]]; then
-  echo "Erro: nao consegui extrair o codigo da sala." >&2
-  echo "$ROOM_JSON" >&2
-  exit 1
+  if [[ -z "$ROOM_CODE" || "$ROOM_CODE" == "$ROOM_JSON" ]]; then
+    echo "Erro: nao consegui extrair o codigo da sala." >&2
+    echo "$ROOM_JSON" >&2
+    exit 1
+  fi
+
+  echo "Sala criada: $ROOM_CODE"
 fi
-
-echo "Sala criada: $ROOM_CODE"
 
 echo "Monitorando memoria em $MEMORY_LOG"
 scripts/watch-memory.sh 2 "$MEMORY_LOG" &

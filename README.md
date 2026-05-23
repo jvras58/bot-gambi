@@ -144,9 +144,11 @@ bun run local -- --participant-id joao-1 --model llama3.2:latest
 scripts\run-local.bat --participant-id joao-1 --model llama3.2:latest
 ```
 
-Os dois aceitam as mesmas opções (`--participant-id`/`-p`, `--model`/`-m`, `--name`/`-n`, `--hub-port`, `--hub`, `--no-mdns`, `--help`/`-h`).
+Os dois aceitam as mesmas opções (`--participant-id`/`-p`, `--model`/`-m`, `--room`/`-r`, `--name`/`-n`, `--hub-port`, `--hub`, `--no-mdns`, `--help`/`-h`).
 
-Esse comando cria a sala, captura automaticamente o código gerado e reaproveita o mesmo código no `gambi participant join` e no `bun run start`.
+> 🌐 **Rodar em várias máquinas pela rede (1 hub + 1 sala compartilhada)?** Veja [docs/rodar-experimento-lan.md](docs/rodar-experimento-lan.md). Resumo: o host roda sem `--room` (cria a sala) e compartilha o código + IP; os participantes entram com `--hub http://<IP-DO-HOST>:3000 --room <CODIGO>`.
+
+Sem `--room`, esse comando cria uma sala nova, captura automaticamente o código gerado e reaproveita o mesmo código no `gambi participant join` e no `bun run start`. Com `--room <CODIGO>`, ele entra numa sala existente em vez de criar uma.
 Enquanto ele roda, o uso de RAM/VRAM e os maiores processos são gravados em `.tmp/memory.log`.
 Por padrão, ele usa `LOW_MEMORY_MODE=true`, que evita cache de chunks e pathfinder para reduzir uso de RAM.
 
