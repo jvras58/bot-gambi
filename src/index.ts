@@ -3,7 +3,6 @@ import { botConfig, gambiarraConfig } from '@/config/settings';
 import { BotManager } from '@/bot/BotManager';
 import { AgentLoop } from '@/core/AgentLoop';
 import { GambiLLM } from '@/llm/GambiarraLLM';
-import { DataLogger } from '@/core/DataLogger';
 import { sleep } from '@/utils/sleep';
 import { parseArgs } from '@/utils/args';
 import type { OnlineParticipant } from '@/types/types';
@@ -117,11 +116,6 @@ async function main(): Promise<void> {
   // Cria LLM configurado pro participante
   const llm = new GambiLLM({ roomCode, hubUrl, participantId: participant.id });
 
-  // Registra snapshot do participante
-  const logger = new DataLogger();
-  await logger.logParticipantSnapshot(crypto.randomUUID(), participant);
-  await logger.shutdown();
-
   // Inicializa bot Minecraft
   const botConfigWithParticipant: typeof botConfig = {
     ...botConfig,
@@ -134,6 +128,7 @@ async function main(): Promise<void> {
     participantId: participant.id,
     participantNickname: participant.nickname,
     modelName: participant.model,
+    participant,
     hubUrl,
   });
 

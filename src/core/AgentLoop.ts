@@ -1,5 +1,5 @@
 /** Loop principal do agente: percepção → LLM → parse → execução → log. */
-import type { ChatMessage, LLMResponse, GameContext, ActionResult, CycleResponseData } from '@/types/types';
+import type { ChatMessage, LLMResponse, GameContext, ActionResult, CycleResponseData, OnlineParticipant } from '@/types/types';
 import type { BotAction } from '@/schemas/botAction';
 import { BotManager } from '@/bot/BotManager';
 import { ActionExecutor } from '@/bot/ActionExecutor';
@@ -32,6 +32,7 @@ export class AgentLoop {
   private participantId: string;
   private participantNickname: string;
   private modelName: string;
+  private participant: OnlineParticipant;
   private cycleNumber = 0;
   private lastActionName: string | null = null;
   private consecutiveActionCount = 0;
@@ -43,6 +44,7 @@ export class AgentLoop {
     participantId: string;
     participantNickname: string;
     modelName: string;
+    participant: OnlineParticipant;
     hubUrl: string;
   }) {
     this.botManager = botManager;
@@ -61,6 +63,7 @@ export class AgentLoop {
     this.participantId = options.participantId;
     this.participantNickname = options.participantNickname;
     this.modelName = options.modelName;
+    this.participant = options.participant;
 
     this.botManager.setCallbacks(
       () => this.onConnected(),
@@ -78,6 +81,9 @@ export class AgentLoop {
       bot_username: this.botUsername,
       participant_id: this.participantId,
     });
+
+    // Snapshot depende da sessão já existir (FK session_id → sessions.id).
+    await this.logger.logParticipantSnapshot(this.sessionId, this.participant);
 
     this.hubWatcher.start();
     this.isRunning = true;
