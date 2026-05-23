@@ -8,6 +8,7 @@ export const botConfig: BotConfig = {
   auth: (process.env.BOT_AUTH as 'offline' | 'microsoft') || 'offline',
   version: process.env.MINECRAFT_VERSION || '1.21.11',
   checkTimeoutInterval: 60_000,
+  viewDistance: (process.env.MINECRAFT_VIEW_DISTANCE as BotConfig['viewDistance']) || 'far',
 };
 
 export const gambiarraConfig = {
@@ -22,4 +23,13 @@ export const agentConfig = {
   perceptionEntityRadius: 16,
   /** Timeout da chamada LLM (ms) */
   llmTimeoutMs: 120_000,
+  /** Limite de tokens gerados por ciclo para evitar respostas infinitas. */
+  llmMaxOutputTokens: parseInt(process.env.LLM_MAX_OUTPUT_TOKENS || '256', 10),
+  /** Modo emergencial: desliga cache de chunks/pathfinder e reduz ações. */
+  lowMemoryMode: process.env.LOW_MEMORY_MODE === 'true',
+  /** Poda chunks distantes. Desligado por padrão porque o vazamento real era o collectblock. */
+  pruneWorldCache: process.env.PRUNE_WORLD_CACHE === 'true',
+  /** Mantem apenas chunks proximos no cache local do Mineflayer. */
+  chunkCacheRadius: parseInt(process.env.MINECRAFT_CHUNK_CACHE_RADIUS || '12', 10),
+  worldPruneIntervalMs: 5_000,
 };

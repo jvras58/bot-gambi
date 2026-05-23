@@ -3,7 +3,6 @@ import { botConfig, gambiarraConfig } from '@/config/settings';
 import { BotManager } from '@/bot/BotManager';
 import { AgentLoop } from '@/core/AgentLoop';
 import { GambiLLM } from '@/llm/GambiarraLLM';
-import { DataLogger } from '@/core/DataLogger';
 import { sleep } from '@/utils/sleep';
 import { parseArgs } from '@/utils/args';
 import type { OnlineParticipant } from '@/types/types';
@@ -16,7 +15,7 @@ Cada instância controla 1 bot no Minecraft usando 1 LLM participante.
 Métricas são coletadas no Supabase para análise comparativa.
 
 Uso:
-  bun run dev -- --room <ROOM_CODE> [opções]
+  bun run start -- --room <ROOM_CODE> [opções]
 
 Opções:
   --room, -r <code>          Código da sala Gambi (obrigatório)
@@ -25,9 +24,9 @@ Opções:
   --help, -h                 Mostra esta ajuda
 
 Exemplo:
-  bun run dev -- --room ABC123
-  bun run dev -- --room ABC123 -p meu-pc
-  bun run dev -- --room ABC123 --hub http://192.168.1.10:3000
+  bun run start -- --room ABC123
+  bun run start -- --room ABC123 -p meu-pc
+  bun run start -- --room ABC123 --hub http://192.168.1.10:3000
 
 Variáveis de ambiente:
   SUPABASE_URL         URL do projeto Supabase (para coleta de dados)
@@ -117,12 +116,8 @@ async function main(): Promise<void> {
   // Cria LLM configurado pro participante
   const llm = new GambiLLM({ roomCode, hubUrl, participantId: participant.id });
 
-  // Registra snapshot do participante
-  const logger = new DataLogger();
-  await logger.logParticipantSnapshot(crypto.randomUUID(), participant);
-
   // Inicializa bot Minecraft
-    const botConfigWithParticipant: typeof botConfig = {
+  const botConfigWithParticipant: typeof botConfig = {
     ...botConfig,
     username: participant.id,
   };
@@ -133,17 +128,21 @@ async function main(): Promise<void> {
     participantId: participant.id,
     participantNickname: participant.nickname,
     modelName: participant.model,
+    participant,
     hubUrl,
   });
 
   // Graceful shutdown
-  const shutdown = async () => {
+  let shuttingDown = false;
+  const shutdown = async (exitCode = 0) => {
+    if (shuttingDown) return;
+    shuttingDown = true;
     console.log('\n🛑 Encerrando...');
     await agent.shutdown();
-    process.exit(0);
+    process.exit(exitCode);
   };
-  process.on('SIGINT', () => { shutdown(); });
-  process.on('SIGTERM', () => { shutdown(); });
+  process.on('SIGINT', () => { void shutdown(); });
+  process.on('SIGTERM', () => { void shutdown(); });
 
   // Conecta e inicia
   botManager.createBot();
