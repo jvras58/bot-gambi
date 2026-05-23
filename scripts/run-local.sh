@@ -82,8 +82,13 @@ if [[ -z "$MODEL" || "$MODEL" == "*" ]]; then
 fi
 
 if ! command -v gambi >/dev/null 2>&1; then
-  echo "Erro: comando 'gambi' nao encontrado no PATH." >&2
-  exit 1
+  echo "Comando 'gambi' nao encontrado. Instalando..."
+  curl -fsSL https://raw.githubusercontent.com/arthurbm/gambi/main/scripts/install.sh | bash
+  hash -r 2>/dev/null || true
+  if ! command -v gambi >/dev/null 2>&1; then
+    echo "Erro: falha ao instalar 'gambi'. Instale manualmente: https://www.gambi.sh/guides/quickstart/" >&2
+    exit 1
+  fi
 fi
 
 if command -v bun >/dev/null 2>&1; then
@@ -92,8 +97,17 @@ elif [[ -x "$HOME/.bun/bin/bun" ]]; then
   BUN_BIN="$HOME/.bun/bin/bun"
   export PATH="$HOME/.bun/bin:$PATH"
 else
-  echo "Erro: comando 'bun' nao encontrado. Instale o Bun ou ajuste o PATH." >&2
-  exit 1
+  echo "Comando 'bun' nao encontrado. Instalando..."
+  curl -fsSL https://bun.sh/install | bash
+  if command -v bun >/dev/null 2>&1; then
+    BUN_BIN="bun"
+  elif [[ -x "$HOME/.bun/bin/bun" ]]; then
+    BUN_BIN="$HOME/.bun/bin/bun"
+    export PATH="$HOME/.bun/bin:$PATH"
+  else
+    echo "Erro: falha ao instalar o Bun. Instale manualmente: https://bun.sh" >&2
+    exit 1
+  fi
 fi
 
 mkdir -p .tmp

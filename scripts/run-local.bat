@@ -47,24 +47,36 @@ if "%MODEL%"=="*" (
 )
 
 where gambi >nul 2>&1
-if errorlevel 1 (
-  echo Erro: comando 'gambi' nao encontrado no PATH. 1>&2
-  exit /b 1
-)
+if not errorlevel 1 goto gambi_ok
+echo Comando 'gambi' nao encontrado. Instalando...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/arthurbm/gambi/main/scripts/install.ps1 | iex"
+if exist "%LOCALAPPDATA%\gambi\gambi.exe" set "PATH=%LOCALAPPDATA%\gambi;%PATH%"
+where gambi >nul 2>&1
+if not errorlevel 1 goto gambi_ok
+echo Erro: falha ao instalar 'gambi'. Feche e reabra o terminal e tente de novo, ou instale manualmente: https://www.gambi.sh/guides/quickstart/ 1>&2
+exit /b 1
+:gambi_ok
 
 set "BUN_BIN="
 where bun >nul 2>&1
-if not errorlevel 1 (
-  set "BUN_BIN=bun"
-) else (
-  if exist "%USERPROFILE%\.bun\bin\bun.exe" (
-    set "BUN_BIN=%USERPROFILE%\.bun\bin\bun.exe"
-    set "PATH=%USERPROFILE%\.bun\bin;%PATH%"
-  ) else (
-    echo Erro: comando 'bun' nao encontrado. Instale o Bun ou ajuste o PATH. 1>&2
-    exit /b 1
-  )
+if not errorlevel 1 ( set "BUN_BIN=bun" & goto bun_ok )
+if exist "%USERPROFILE%\.bun\bin\bun.exe" (
+  set "BUN_BIN=%USERPROFILE%\.bun\bin\bun.exe"
+  set "PATH=%USERPROFILE%\.bun\bin;%PATH%"
+  goto bun_ok
 )
+echo Comando 'bun' nao encontrado. Instalando...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "irm bun.sh/install.ps1 | iex"
+where bun >nul 2>&1
+if not errorlevel 1 ( set "BUN_BIN=bun" & goto bun_ok )
+if exist "%USERPROFILE%\.bun\bin\bun.exe" (
+  set "BUN_BIN=%USERPROFILE%\.bun\bin\bun.exe"
+  set "PATH=%USERPROFILE%\.bun\bin;%PATH%"
+  goto bun_ok
+)
+echo Erro: falha ao instalar o Bun. Feche e reabra o terminal e tente de novo, ou instale manualmente: https://bun.sh 1>&2
+exit /b 1
+:bun_ok
 
 if not exist ".tmp" mkdir ".tmp"
 set "HUB_LOG=.tmp\gambi-hub.log"
