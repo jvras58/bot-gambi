@@ -56,6 +56,8 @@ Cada bot a cada ciclo (~3s):
 
 Instale o Bun antes de rodar `bun install`:
 
+**Linux / macOS:**
+
 ```bash
 curl -fsSL https://bun.sh/install | bash
 source ~/.zshrc
@@ -68,6 +70,15 @@ Se o `bun --version` ainda falhar no zsh, abra um novo terminal ou adicione manu
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 ```
+
+**Windows** (PowerShell):
+
+```powershell
+powershell -c "irm bun.sh/install.ps1 | iex"
+bun --version
+```
+
+Se o `bun --version` falhar, feche e reabra o terminal (o instalador adiciona o Bun ao PATH). O `scripts\run-local.bat` também aceita o Bun em `%USERPROFILE%\.bun\bin\bun.exe` como fallback.
 
 ## Setup
 
@@ -119,11 +130,21 @@ bun run start -- --room ABC123
 
 ```
 
-Para rodar tudo local em um comando (hub + sala + participante + bot), use:
+Para rodar tudo local em um comando (hub + sala + participante + bot):
+
+**Linux / macOS:**
 
 ```bash
 bun run local -- --participant-id joao-1 --model llama3.2:latest
 ```
+
+**Windows** (`bun run local` usa `bash`, que não existe por padrão no Windows — chame o `.bat` direto):
+
+```bat
+scripts\run-local.bat --participant-id joao-1 --model llama3.2:latest
+```
+
+Os dois aceitam as mesmas opções (`--participant-id`/`-p`, `--model`/`-m`, `--name`/`-n`, `--hub-port`, `--hub`, `--no-mdns`, `--help`/`-h`).
 
 Esse comando cria a sala, captura automaticamente o código gerado e reaproveita o mesmo código no `gambi participant join` e no `bun run start`.
 Enquanto ele roda, o uso de RAM/VRAM e os maiores processos são gravados em `.tmp/memory.log`.
@@ -132,8 +153,16 @@ Por padrão, ele usa `LOW_MEMORY_MODE=true`, que evita cache de chunks e pathfin
 Para acompanhar em outro terminal:
 
 ```bash
+# Linux / macOS
 tail -f .tmp/memory.log
 ```
+
+```powershell
+# Windows (PowerShell)
+Get-Content .tmp\memory.log -Wait
+```
+
+> No Windows, ao parar com `Ctrl+C`, responda `N` em *"Encerrar trabalho em lotes (S/N)?"* para o script encerrar o hub, o participante e o monitor sozinho. Se responder `S`, esses processos podem continuar rodando — encerre-os com `taskkill /IM gambi.exe /F`.
 
 O bot auto-detecta qual participante usar (o que tá rodando na mesma máquina via `gambi join`) e entra no jogo com esse nome. Se tiver ambiguidade, especifique:
 
