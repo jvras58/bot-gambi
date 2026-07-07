@@ -47,6 +47,38 @@ Cada bot a cada ciclo (~3s):
 5. **Executa** a ação no Minecraft
 6. **Loga** métricas no Supabase
 
+## 🚀 Instalação rápida (participantes)
+
+Não precisa clonar o repo, instalar Bun nem configurar `.env` — uma linha instala o binário pronto (com a coleta de métricas já embutida):
+
+**Windows** (PowerShell):
+
+```powershell
+powershell -c "irm https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.ps1 | iex"
+```
+
+**Linux / macOS:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.sh | bash
+```
+
+Depois, cada participante roda só isto (com o código da sala e o IP que o host compartilhar):
+
+```bash
+# 1. Entrar na sala Gambi com sua LLM
+gambi participant join --room ABC123 --model llama3.2:latest --hub http://<IP-DO-HOST>:3000
+
+# 2. Rodar o bot
+minecraft-bot --room ABC123 --hub http://<IP-DO-HOST>:3000
+```
+
+O endereço do servidor Minecraft do experimento e as credenciais do Supabase já vêm embutidos no binário — dá pra sobrescrever com `--mc-host`/`--mc-port` ou variáveis de ambiente se precisar.
+
+> Os binários são publicados em [Releases](https://github.com/jvras58/bot-gambi/releases) pelo workflow `release.yml` a cada tag `v*`. Configure nos ajustes do repositório (secrets ou variables de Actions): `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MINECRAFT_HOST`, `MINECRAFT_PORT`, `MINECRAFT_VERSION` e `BOT_AUTH`.
+
+As seções abaixo são para quem vai **desenvolver o bot ou hospedar o experimento** (rodar hub + servidor Minecraft).
+
 ## Pré-requisitos
 
 * **Bun** (runtime)
@@ -176,12 +208,15 @@ bun run start -- --room ABC123 --participant meu-pc
 ## CLI
 
 ```
-bun run start -- --room <ROOM_CODE> [opções]
+minecraft-bot --room <ROOM_CODE> [opções]        # binário instalado
+bun run start -- --room <ROOM_CODE> [opções]     # a partir do repo
 
 Opções:
   --room, -r <code>          Código da sala Gambi (obrigatório)
   --participant, -p <name>   Nickname ou ID do participante (opcional — auto-detecta)
   --hub <url>                URL do hub (default: http://localhost:3000)
+  --mc-host <host>           Host do servidor Minecraft (default: localhost)
+  --mc-port <port>           Porta do servidor Minecraft (default: 25565)
   --help, -h                 Mostra ajuda
 
 ```
@@ -193,8 +228,10 @@ Opções:
 | CLI | `--room` | Código da sala | (obrigatório) |
 | CLI | `--participant` | ID do participante (define o nome do bot) | (auto-detecta) |
 | CLI | `--hub` | URL do hub | `http://localhost:3000` |
-| .env | `SUPABASE_URL` | URL do Supabase | (desativado) |
-| .env | `SUPABASE_ANON_KEY` | Chave anônima | (desativado) |
+| CLI | `--mc-host` | Host do servidor Minecraft | `localhost` |
+| CLI | `--mc-port` | Porta do servidor Minecraft | `25565` |
+| .env | `SUPABASE_URL` | URL do Supabase | (embutido no binário de release) |
+| .env | `SUPABASE_ANON_KEY` | Chave anônima | (embutido no binário de release) |
 | .env | `MINECRAFT_HOST` | Host do servidor | `localhost` |
 | .env | `MINECRAFT_PORT` | Porta do servidor | `25565` |
 

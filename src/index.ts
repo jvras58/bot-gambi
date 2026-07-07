@@ -15,20 +15,23 @@ Cada instância controla 1 bot no Minecraft usando 1 LLM participante.
 Métricas são coletadas no Supabase para análise comparativa.
 
 Uso:
-  bun run start -- --room <ROOM_CODE> [opções]
+  minecraft-bot --room <ROOM_CODE> [opções]        (binário instalado)
+  bun run start -- --room <ROOM_CODE> [opções]     (a partir do repo)
 
 Opções:
   --room, -r <code>          Código da sala Gambi (obrigatório)
   --participant, -p <name>   Nickname ou ID do participante (opcional — auto-detecta se só tem 1)
   --hub <url>                URL do hub (default: ${gambiarraConfig.hubUrl})
+  --mc-host <host>           Host do servidor Minecraft (default: ${botConfig.host})
+  --mc-port <port>           Porta do servidor Minecraft (default: ${botConfig.port})
   --help, -h                 Mostra esta ajuda
 
 Exemplo:
-  bun run start -- --room ABC123
-  bun run start -- --room ABC123 -p meu-pc
-  bun run start -- --room ABC123 --hub http://192.168.1.10:3000
+  minecraft-bot --room ABC123
+  minecraft-bot --room ABC123 -p meu-pc
+  minecraft-bot --room ABC123 --hub http://192.168.1.10:3000 --mc-host 192.168.1.10
 
-Variáveis de ambiente:
+Variáveis de ambiente (opcionais — flags têm precedência):
   SUPABASE_URL         URL do projeto Supabase (para coleta de dados)
   SUPABASE_ANON_KEY    Chave anônima do Supabase
   MINECRAFT_HOST       Host do servidor Minecraft (default: localhost)
@@ -116,10 +119,12 @@ async function main(): Promise<void> {
   // Cria LLM configurado pro participante
   const llm = new GambiLLM({ roomCode, hubUrl, participantId: participant.id });
 
-  // Inicializa bot Minecraft
+  // Inicializa bot Minecraft (flags CLI sobrescrevem .env)
   const botConfigWithParticipant: typeof botConfig = {
     ...botConfig,
     username: participant.id,
+    host: args.mcHost ?? botConfig.host,
+    port: args.mcPort ?? botConfig.port,
   };
   const botManager = new BotManager(botConfigWithParticipant);
   const agent = new AgentLoop(botManager, llm, {

@@ -1,12 +1,13 @@
 /** Configurações globais do bot, Gambi Hub e agente. */
+import { embedded } from '@/config/embedded';
 import type { BotConfig } from '@/types/types';
 
 export const botConfig: BotConfig = {
-  host: process.env.MINECRAFT_HOST || 'localhost',
-  port: parseInt(process.env.MINECRAFT_PORT || '25565'),
+  host: process.env.MINECRAFT_HOST || embedded.minecraftHost || 'localhost',
+  port: parseInt(process.env.MINECRAFT_PORT || embedded.minecraftPort || '25565'),
   username: process.env.BOT_USERNAME || 'AgenteBot',
-  auth: (process.env.BOT_AUTH as 'offline' | 'microsoft') || 'offline',
-  version: process.env.MINECRAFT_VERSION || '1.21.11',
+  auth: ((process.env.BOT_AUTH || embedded.botAuth) as 'offline' | 'microsoft') || 'offline',
+  version: process.env.MINECRAFT_VERSION || embedded.minecraftVersion || '1.21.11',
   checkTimeoutInterval: 60_000,
   viewDistance: (process.env.MINECRAFT_VIEW_DISTANCE as BotConfig['viewDistance']) || 'far',
 };

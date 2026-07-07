@@ -4,6 +4,8 @@ export interface BotArgs {
   room: string | null;
   hub: string | null;
   participant: string | null;
+  mcHost: string | null;
+  mcPort: number | null;
   help: boolean;
 }
 
@@ -12,6 +14,8 @@ export function parseArgs(argv: string[]): BotArgs {
     room: null,
     hub: null,
     participant: null,
+    mcHost: null,
+    mcPort: null,
     help: false,
   };
 
@@ -34,6 +38,16 @@ export function parseArgs(argv: string[]): BotArgs {
         args.participant = next ?? null;
         i++;
         break;
+      case '--mc-host':
+        args.mcHost = next ?? null;
+        i++;
+        break;
+      case '--mc-port': {
+        const port = parseInt(next ?? '', 10);
+        args.mcPort = Number.isNaN(port) ? null : port;
+        i++;
+        break;
+      }
       case '--help':
       case '-h':
         args.help = true;

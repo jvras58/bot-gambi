@@ -1,4 +1,5 @@
 /** Envia métricas para Supabase (fire-and-forget). */
+import { embedded } from '@/config/embedded';
 import type { OnlineParticipant, CycleResponseData } from '@/types/types';
 
 const BATCH_SIZE = 20;
@@ -14,8 +15,8 @@ export class DataLogger {
   private isFlushing = false;
 
   constructor() {
-    this.supabaseUrl = process.env.SUPABASE_URL?.replace(/\/$/, '') || null;
-    this.supabaseKey = process.env.SUPABASE_ANON_KEY || null;
+    this.supabaseUrl = (process.env.SUPABASE_URL || embedded.supabaseUrl)?.replace(/\/$/, '') || null;
+    this.supabaseKey = process.env.SUPABASE_ANON_KEY || embedded.supabaseAnonKey || null;
     this.enabled = !!(this.supabaseUrl && this.supabaseKey);
 
     if (this.enabled) {

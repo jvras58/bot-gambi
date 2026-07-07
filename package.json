@@ -9,9 +9,11 @@
     "mem": "bash scripts/watch-memory.sh",
     "check-types": "tsc --noEmit",
     "tests": "bun run tests/test-connection.ts",
-    "build": "bun build --compile --target=bun src/index.ts --outfile dist/minecraft-bot",
-    "build:win": "bun build --compile --target=bun-windows-x64 src/index.ts --outfile dist/minecraft-bot.exe",
-    "build:linux": "bun build --compile --target=bun-linux-x64 src/index.ts --outfile dist/minecraft-bot"
+    "build": "bun scripts/build.ts",
+    "build:win": "bun scripts/build.ts win",
+    "build:linux": "bun scripts/build.ts linux",
+    "build:mac": "bun scripts/build.ts mac",
+    "build:all": "bun scripts/build.ts all"
   },
   "dependencies": {
     "ai": "^6.0.6",

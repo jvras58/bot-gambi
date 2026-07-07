@@ -1,0 +1,53 @@
+name: Release
+
+# Dispara ao criar uma tag de versão, ex.:
+#   git tag v0.1.0 && git push origin v0.1.0
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Instalar dependências
+        run: bun install --frozen-lockfile
+
+      # Valores vêm de Settings > Secrets and variables > Actions
+      # (aceita tanto Secrets quanto Variables). Tudo é embutido nos
+      # binários para que participantes não precisem de .env.
+      - name: Compilar binários (win/linux/mac)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || vars.SUPABASE_ANON_KEY }}
+          MINECRAFT_HOST: ${{ secrets.MINECRAFT_HOST || vars.MINECRAFT_HOST }}
+          MINECRAFT_PORT: ${{ secrets.MINECRAFT_PORT || vars.MINECRAFT_PORT }}
+          MINECRAFT_VERSION: ${{ secrets.MINECRAFT_VERSION || vars.MINECRAFT_VERSION }}
+          BOT_AUTH: ${{ secrets.BOT_AUTH || vars.BOT_AUTH }}
+        run: bun scripts/build.ts all
+
+      - name: Empacotar
+        run: |
+          cd dist
+          zip -j minecraft-bot-windows-x64.zip win-x64/minecraft-bot.exe
+          tar -czf minecraft-bot-linux-x64.tar.gz -C linux-x64 minecraft-bot
+          tar -czf minecraft-bot-darwin-arm64.tar.gz -C darwin-arm64 minecraft-bot
+          tar -czf minecraft-bot-darwin-x64.tar.gz -C darwin-x64 minecraft-bot
+
+      - name: Publicar release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/minecraft-bot-windows-x64.zip
+            dist/minecraft-bot-linux-x64.tar.gz
+            dist/minecraft-bot-darwin-arm64.tar.gz
+            dist/minecraft-bot-darwin-x64.tar.gz
+          generate_release_notes: true
