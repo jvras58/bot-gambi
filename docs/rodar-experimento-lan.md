@@ -21,12 +21,30 @@ flowchart TD
 
 ---
 
-## Pré-requisitos (em TODAS as máquinas)
+## Pré-requisitos
+
+**No HOST (você):**
 
 - **Bun**, **gambi** e o repositório clonado com `bun install` feito.
   - Os scripts `run-local` instalam `gambi` e `bun` automaticamente se faltarem.
-- **Servidor Minecraft** Java acessível por todos (pode ser na máquina do host ou em outra).
-- Todas as máquinas na **mesma rede** (mesmo Wi-Fi/switch).
+- **Servidor Minecraft** Java acessível por todos (o endereço do servidor do experimento já vem embutido no binário de release).
+
+**Nos PARTICIPANTES** (não precisam de repo, Bun nem `.env`):
+
+- **gambi** instalado e a LLM local rodando (ex.: Ollama).
+- O binário `minecraft-bot`, instalado com uma linha:
+
+  **Windows** (PowerShell):
+  ```powershell
+  powershell -c "irm https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.ps1 | iex"
+  ```
+
+  **Linux / macOS:**
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.sh | bash
+  ```
+
+**Em todas:** mesma rede (mesmo Wi-Fi/switch).
 
 ---
 
@@ -85,7 +103,22 @@ Iniciando bot...
 
 ### 2. Nos PARTICIPANTES — entram na sala do host
 
-Cada um usa `--room <CODIGO>` (entra na sala existente, **não** cria outra) e `--hub http://<IP-DO-HOST>:3000`:
+Com o binário instalado, são **dois terminais** por máquina — um pro `gambi participant join` (fica aberto, é o túnel da LLM local) e outro pro bot:
+
+```bash
+# Terminal 1 — entrar na sala do host com sua LLM (fica rodando)
+gambi participant join --room ABC123 --participant-id maria-3 --model qwen2 --hub http://192.168.1.13:3000
+
+# Terminal 2 — rodar o bot
+minecraft-bot --room ABC123 --hub http://192.168.1.13:3000
+```
+
+O servidor Minecraft e a coleta de métricas (Supabase) já vêm embutidos no binário — não precisa configurar nada além do código da sala e do IP do host. Se precisar apontar pra outro servidor, use `--mc-host`/`--mc-port`.
+
+> Importante: cada participante usa um `--participant-id` **único** (vira o nome do bot no Minecraft). Não repita IDs. E use em `--model` o nome exato retornado por `ollama list` (ex.: `llama3.2:latest`).
+
+<details>
+<summary><b>Alternativa: rodar a partir do repositório</b> (sem o binário — precisa de Bun + repo clonado)</summary>
 
 **Windows:**
 ```bat
@@ -99,11 +132,13 @@ bun run local -- --participant-id maria-3 --model qwen2 --hub http://192.168.1.1
 
 Como o hub do host já está no ar, o script detecta isso (`Hub ja esta rodando em http://192.168.1.13:3000`), **não** sobe um hub local, **pula a criação da sala** (`Usando sala existente: ABC123`) e entra direto.
 
-> Importante: cada participante usa um `--participant-id` **único** (vira o nome do bot no Minecraft). Não repita IDs.
+</details>
 
 ---
 
 ## Acompanhar uso de memória
+
+> Só no fluxo `run-local` (a partir do repo). O binário instalado não grava esse log.
 
 Enquanto roda, cada máquina grava RAM/VRAM e os maiores processos em `.tmp/memory.log`. Em outro terminal:
 
@@ -120,6 +155,7 @@ Get-Content .tmp\memory.log -Wait
 
 ## Encerrar
 
+- **Participantes (binário):** `Ctrl+C` nos dois terminais (bot e `gambi participant join`).
 - **Linux/macOS:** `Ctrl+C` — o script encerra hub, participante e monitor sozinho (via `trap`).
 - **Windows:** `Ctrl+C` e responda **`N`** em *"Encerrar trabalho em lotes (S/N)?"* para a limpeza rodar. Se responder `S`, encerre os processos manualmente:
   ```powershell
@@ -130,12 +166,10 @@ Get-Content .tmp\memory.log -Wait
 
 ## Resumo dos comandos
 
-| Papel | Cria sala? | Sobe hub? | Comando (Windows) |
+| Papel | Cria sala? | Sobe hub? | Comandos |
 |---|---|---|---|
-| **Host** | sim (auto) | sim | `scripts\run-local.bat -p joao-1 -m llama3.2:latest` |
-| **Participante** | não (usa `--room`) | não (usa o do host) | `scripts\run-local.bat -p maria-3 -m qwen2 --hub http://192.168.1.13:3000 --room ABC123` |
-
-(No Linux/macOS troque `scripts\run-local.bat` por `bun run local --`.)
+| **Host** | sim (auto) | sim | `scripts\run-local.bat -p joao-1 -m llama3.2:latest` (Linux/macOS: `bun run local --`) |
+| **Participante** | não (usa `--room`) | não (usa o do host) | `gambi participant join --room ABC123 --participant-id maria-3 --model qwen2 --hub http://192.168.1.13:3000` e depois `minecraft-bot --room ABC123 --hub http://192.168.1.13:3000` |
 
 ---
 
