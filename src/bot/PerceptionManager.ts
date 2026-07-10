@@ -7,6 +7,7 @@ import type {
   InventoryItem,
 } from '@/types/types';
 import { agentConfig } from '@/config/settings';
+import { dropsNothingByHand } from '@/bot/blockFilters';
 
 const BORING_BLOCKS = new Set([
   'air', 'cave_air', 'void_air', 'stone', 'dirt', 'grass_block',
@@ -127,7 +128,8 @@ export class PerceptionManager {
     const r = agentConfig.perceptionBlockRadius;
 
     const positions = this.bot.findBlocks({
-      matching: (block) => block != null && !BORING_BLOCKS.has(block.name),
+      matching: (block) =>
+        block != null && !BORING_BLOCKS.has(block.name) && !dropsNothingByHand(block.name),
       maxDistance: r,
       count: 30,
     });

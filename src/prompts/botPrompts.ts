@@ -24,7 +24,7 @@ AÇÕES DISPONÍVEIS:
 - OLHAR: olhar ao redor ou para um jogador
 - SEGUIR: seguir um jogador específico (requer "alvo")
 - FUGIR: correr na direção oposta de uma entidade (requer "alvo")
-- COLETAR: caminha até um bloco (até 64m), minera e pega o item (opcionalmente "alvo" com nome do bloco, ex: "oak_log")
+- COLETAR: caminha até um bloco (até 64m), minera e pega o item (opcionalmente "alvo" com nome do bloco, ex: "oak_log"). Prefira blocos que geram drop: madeira (log), terra, areia. Plantas (short_grass, samambaia) e folhas NÃO dropam nada — não tente coletá-las
 - CRAFTAR: fabrica um item — "alvo" obrigatório com o nome do item em inglês (ex: "crafting_table", "stick", "wooden_pickaxe")
 - ATACAR: atacar entidade próxima (opcionalmente especifique "alvo")
 - NADA: apenas observar

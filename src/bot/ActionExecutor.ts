@@ -4,6 +4,7 @@ import type { Block } from 'prismarine-block';
 import type { ActionResult } from '@/types/types';
 import type { BotAction } from '@/schemas/botAction';
 import { MovementManager } from '@/bot/MovementManager';
+import { dropsNothingByHand } from '@/bot/blockFilters';
 
 /** Blocos comuns demais para serem alvo de COLETAR sem alvo explícito. */
 const BORING_BLOCKS = new Set([
@@ -180,7 +181,7 @@ export class ActionExecutor {
     const target = this.normalizarAlvoBloco(alvo);
     const ids = this.resolverBlocoIds(alvo);
     if (ids.length === 0 && target) {
-      console.warn(`⛏️  ${target} nao existe no registry; usando fallback coletavel`);
+      console.warn(`⛏️  ${target} nao e coletavel (nao existe ou nao dropa na mao); usando fallback`);
     }
 
     let block = ids.length > 0 ? this.findCollectableBlock(ids) : null;
@@ -236,10 +237,11 @@ export class ActionExecutor {
     if (pickedUp || inventoryAfter > inventoryBefore) {
       console.log(`📦 Drop confirmado no inventário (+${Math.max(0, inventoryAfter - inventoryBefore)} itens)`);
     } else {
-      console.warn(
-        `📦 Drop não confirmado no inventário ` +
-          `(inv ${inventoryBefore}->${inventoryAfter}, drops perto ${this.countDroppedItemsNear(currentBlock.position, 8)}, ` +
-          `modo ${this.bot.game.gameMode})`,
+      // Falha de verdade: sem drop no inventário a coleta não rendeu nada.
+      // Assim o LLM vê o erro na memória e a métrica action_success fica honesta.
+      throw new Error(
+        `Minerei ${currentBlock.name} mas o drop não chegou ao inventário ` +
+          `(inv ${inventoryBefore}->${inventoryAfter}, drops perto ${this.countDroppedItemsNear(currentBlock.position, 8)})`,
       );
     }
   }
@@ -252,6 +254,7 @@ export class ActionExecutor {
         !!block &&
         block.diggable &&
         block.name !== 'air' &&
+        !dropsNothingByHand(block.name) &&
         this.canHarvestWithInventory(block),
       );
 
@@ -351,6 +354,8 @@ export class ActionExecutor {
     }
 
     for (const name of Object.keys(blocks)) {
+      // Plantas/folhas sem drop na mão nunca são alvo — minerar não rende nada
+      if (dropsNothingByHand(name)) continue;
       if (target) {
         if (!name.includes(target)) continue;
       } else if (BORING_BLOCKS.has(name)) {
