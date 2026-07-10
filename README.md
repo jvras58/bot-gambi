@@ -47,6 +47,13 @@ Cada bot a cada ciclo (~3s):
 5. **Executa** a ação no Minecraft
 6. **Loga** métricas no Supabase
 
+## 📋 Guias do experimento
+
+Vai rodar o experimento? Use os guias passo a passo — feitos pra copiar e colar:
+
+- **[Guia do HOST](docs/guia-host.md)** — iniciar o gambi hub (com mDNS), criar a sala e compartilhar com todos
+- **[Guia do PARTICIPANTE](docs/guia-participante.md)** — instalar e entrar com seu bot em 3 comandos
+
 ## 🚀 Instalação rápida (participantes)
 
 Não precisa clonar o repo, instalar Bun nem configurar `.env` — uma linha instala o binário pronto (com a coleta de métricas já embutida):

@@ -1,5 +1,7 @@
 # Rodar o Experimento na LAN (Hub compartilhado)
 
+> 💡 **Procurando o passo a passo simples?** Use o [guia do HOST](guia-host.md) e o [guia do PARTICIPANTE](guia-participante.md). Este documento é a referência detalhada (rede, firewall, solução de problemas).
+
 Como rodar o bot em várias máquinas ao mesmo tempo, todas conectadas ao **mesmo hub Gambi** e à **mesma sala**, pela rede local (LAN).
 
 A ideia: **uma** máquina é o **host** (sobe o hub e cria a sala). As outras são **participantes** e entram na sala do host pelo IP dele. Todos os bots jogam no mesmo servidor de Minecraft.
