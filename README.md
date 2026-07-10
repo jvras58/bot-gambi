@@ -53,6 +53,7 @@ Vai rodar o experimento? Use os guias passo a passo — feitos pra copiar e cola
 
 - **[Guia do HOST](docs/guia-host.md)** — iniciar o gambi hub (com mDNS), criar a sala e compartilhar com todos
 - **[Guia do PARTICIPANTE](docs/guia-participante.md)** — instalar e entrar com seu bot em 3 comandos
+- **[Comandos do Minecraft](docs/comandos-minecraft.md)** — virar OP, teleporte, criativo e comandos úteis do experimento
 
 ## 🚀 Instalação rápida (participantes)
 
