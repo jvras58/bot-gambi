@@ -4,13 +4,17 @@ Você vai receber do host **2 informações**: o **código da sala** (ex.: `ABC1
 
 ## 0. O que você precisa ter
 
-- **Ollama** (ou LM Studio) rodando com um modelo baixado. Confira o nome exato do seu modelo:
+- **Uma LLM rodando na sua máquina.** O gambi aceita vários provedores — **Ollama, LM Studio, vLLM, OpenRouter**, entre outros. O mais fácil é o **Ollama**, então os exemplos abaixo usam ele:
 
   ```bash
   ollama list
   ```
 
-  > Use o nome **exato** (ex.: `llama3.2:latest` — só `llama3` dá erro).
+  > Use o nome **exato** que aparecer (ex.: `llama3.2:latest` — só `llama3` dá erro).
+  >
+  > Usando outro provedor? Passe o endpoint dele no passo 2 com `--endpoint`
+  > (ex.: LM Studio: `--endpoint http://localhost:1234`). Veja a
+  > [documentação do gambi](https://www.gambi.sh/guides/quickstart/).
 
 - **gambi** instalado:
 
@@ -71,7 +75,7 @@ O servidor de Minecraft e a coleta de métricas já vêm configurados dentro do 
 | Erro | O que fazer |
 |---|---|
 | `Unable to connect` / `hub não respondeu` | Confira o IP com o host e se vocês estão na **mesma rede** (Wi-Fi). |
-| `Model 'xxx' not found` | O nome do modelo não bate — use o nome exato do `ollama list`. |
+| `Model 'xxx' not found` | O nome do modelo não bate — use o nome exato (no Ollama: `ollama list`; em outro provedor, o nome que ele expõe). |
 | `Nenhum participante online na sala` | O terminal do passo 2 fechou — rode o `gambi participant join` de novo e deixe aberto. |
 | `minecraft-bot` não é reconhecido | Abra um terminal **novo** (o instalador acabou de mexer no PATH). |
 | Código de sala inválido | O código muda a cada experimento — confirme com o host o código de **hoje**. |
