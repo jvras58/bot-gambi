@@ -133,6 +133,10 @@ export interface CycleResponseData {
 
   prompt_sent: string;
 
+  /** Pedido de jogador em destaque neste ciclo (null se não havia) */
+  chat_request: string | null;
+  chat_request_player: string | null;
+
   health: number;
   food: number;
   pos_x: number;

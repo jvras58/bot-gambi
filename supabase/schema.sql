@@ -90,6 +90,13 @@ CREATE TABLE cycle_responses (
   -- ─── Prompt enviado (contexto + memória deste ciclo) ─────
   prompt_sent text,
 
+  -- ─── Pedido de jogador via chat ──────────────────────────
+  -- Preenchidos quando havia um "PEDIDO DE JOGADOR" em destaque no
+  -- prompt deste ciclo (mensagem de humano no chat, dura até 3 ciclos).
+  -- Base para métrica de obediência: pedido ativo × ação escolhida.
+  chat_request text,
+  chat_request_player text,
+
   -- ─── Contexto do Jogo ────────────────────────────────────
   health numeric,
   food numeric,
@@ -113,6 +120,7 @@ CREATE INDEX idx_cr_participant ON cycle_responses(participant_id);
 CREATE INDEX idx_cr_model ON cycle_responses(model_name);
 CREATE INDEX idx_cr_action ON cycle_responses(action);
 CREATE INDEX idx_cr_created ON cycle_responses(created_at);
+CREATE INDEX idx_cr_chat_request ON cycle_responses(session_id, cycle_number) WHERE chat_request IS NOT NULL;
 CREATE INDEX idx_ps_session ON participant_snapshots(session_id);
 
 -- ─── RLS (acesso anônimo para o bot enviar dados) ─────────
@@ -151,6 +159,25 @@ JOIN participant_snapshots ps
   AND cr.participant_id = ps.participant_id
 WHERE cr.llm_error IS NULL
 GROUP BY cr.model_name, ps.gpu, ps.vram, ps.ram;
+
+-- Ciclos com pedido de jogador ativo — base para medir obediência
+-- (pedido × ação escolhida × quantos ciclos desde o pedido)
+CREATE VIEW v_chat_requests AS
+SELECT
+  cr.model_name,
+  cr.participant_id,
+  cr.session_id,
+  cr.cycle_number,
+  cr.chat_request_player,
+  cr.chat_request,
+  cr.action,
+  cr.reasoning,
+  cr.action_success,
+  cr.llm_response_time_ms,
+  cr.created_at
+FROM cycle_responses cr
+WHERE cr.chat_request IS NOT NULL
+ORDER BY cr.session_id, cr.cycle_number;
 
 -- Resumo por sessão (útil pra comparar execuções)
 CREATE VIEW v_session_summary AS

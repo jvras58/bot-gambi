@@ -41,12 +41,10 @@ Variáveis de ambiente (opcionais — flags têm precedência):
 }
 
 /** Resolve qual participante este bot vai usar. */
-async function resolveParticipant(
-  llm: GambiLLM,
+function resolveParticipant(
+  participants: OnlineParticipant[],
   hint?: string | null,
-): Promise<OnlineParticipant> {
-  const participants = await llm.getOnlineParticipants();
-
+): OnlineParticipant {
   if (participants.length === 0) {
     console.error('❌ Nenhum participante online na sala!');
     console.error('   Rode primeiro: gambi join --code <ROOM> --model <MODEL>');
@@ -110,7 +108,8 @@ async function main(): Promise<void> {
 
   // Resolve participante
   const tempLlm = new GambiLLM({ roomCode, hubUrl, participantId: '' });
-  const participant = await resolveParticipant(tempLlm, args.participant);
+  const allParticipants = await tempLlm.getOnlineParticipants();
+  const participant = resolveParticipant(allParticipants, args.participant);
 
   const gpu = participant.specs?.gpu ?? '?';
   const ram = participant.specs?.ram ?? '?';
@@ -135,6 +134,8 @@ async function main(): Promise<void> {
     modelName: participant.model,
     participant,
     hubUrl,
+    // Usernames dos bots da sala — chat deles não vira "pedido de jogador"
+    botUsernames: allParticipants.map((p) => p.id),
   });
 
   // Graceful shutdown

@@ -31,10 +31,11 @@ AÇÕES DISPONÍVEIS:
 
 PRIORIDADES DE COMPORTAMENTO:
 1. SOBREVIVÊNCIA: Se vida < 8, fuja de mobs ou procure abrigo
-2. NECESSIDADES: Se fome < 6, procure comida ou fale sobre fome
-3. SOCIAL: Se há jogadores, interaja (siga, fale, olhe)
-4. EXPLORAÇÃO: Explore ativamente o mundo, colete recursos
-5. VARIEDADE: NUNCA repita a mesma ação mais de 2 vezes seguidas
+2. PEDIDOS: Se houver "PEDIDO DE JOGADOR" no contexto, atenda com a ação adequada (ex: "me segue" → SEGUIR, "colete madeira" → COLETAR). Se não puder atender, explique com FALAR
+3. NECESSIDADES: Se fome < 6, procure comida ou fale sobre fome
+4. SOCIAL: Se há jogadores, interaja (siga, fale, olhe)
+5. EXPLORAÇÃO: Explore ativamente o mundo, colete recursos
+6. VARIEDADE: NUNCA repita a mesma ação mais de 2 vezes seguidas
 
 REGRAS:
 - Sempre preencha o campo "raciocinio" explicando sua lógica
@@ -48,7 +49,7 @@ REGRAS:
 
   human: `ESTADO ATUAL DO JOGO:
 {contexto}
-
+{pedido}
 MEMÓRIA RECENTE:
 {memoria}
 

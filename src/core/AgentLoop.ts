@@ -38,6 +38,14 @@ export class AgentLoop {
   private consecutiveActionCount = 0;
   private forcedVarietyIndex = 0;
 
+  /** Usernames dos outros bots da sala — chat deles não vira pedido prioritário. */
+  private knownBotUsernames: Set<string>;
+  /** Último pedido de um jogador humano, destacado no prompt por até 3 ciclos. */
+  private pendingRequest: { jogador: string; mensagem: string; cyclesShown: number } | null = null;
+  /** Pedido incluído no prompt do ciclo atual (vai para o log do ciclo). */
+  private shownRequest: { jogador: string; mensagem: string } | null = null;
+  private static readonly REQUEST_MAX_CYCLES = 3;
+
   constructor(botManager: BotManager, llm: GambiLLM, options: {
     roomCode: string;
     botUsername: string;
@@ -46,6 +54,7 @@ export class AgentLoop {
     modelName: string;
     participant: OnlineParticipant;
     hubUrl: string;
+    botUsernames?: string[];
   }) {
     this.botManager = botManager;
     this.llm = llm;
@@ -64,6 +73,7 @@ export class AgentLoop {
     this.participantNickname = options.participantNickname;
     this.modelName = options.modelName;
     this.participant = options.participant;
+    this.knownBotUsernames = new Set(options.botUsernames ?? []);
 
     this.botManager.setCallbacks(
       () => this.onConnected(),
@@ -211,8 +221,24 @@ export class AgentLoop {
   // ─── Construção do Prompt ────────────────────────────────
 
   private buildMessages(contexto: string): ChatMessage[] {
+    if (this.pendingRequest && this.pendingRequest.cyclesShown >= AgentLoop.REQUEST_MAX_CYCLES) {
+      this.pendingRequest = null;
+    }
+    let pedido = '';
+    this.shownRequest = this.pendingRequest
+      ? { jogador: this.pendingRequest.jogador, mensagem: this.pendingRequest.mensagem }
+      : null;
+    if (this.pendingRequest) {
+      this.pendingRequest.cyclesShown++;
+      pedido = `
+      PEDIDO DE JOGADOR (atenda com a ação adequada, ou responda com FALAR):
+    ${this.pendingRequest.jogador} disse: "${this.pendingRequest.mensagem}"
+    `;
+        }
+
     let humanMsg = botPromptTemplate.human
       .replace('{contexto}', contexto)
+      .replace('{pedido}', pedido)
       .replace('{memoria}', this.memory.toPromptString())
       .replace('{contadorAcoes}', JSON.stringify(this.memory.getActionCounts()));
 
@@ -382,6 +408,9 @@ MODO LEVE DE MEMÓRIA:
 
       prompt_sent: promptSent,
 
+      chat_request: this.shownRequest?.mensagem ?? null,
+      chat_request_player: this.shownRequest?.jogador ?? null,
+
       health: data.gameCtx.vida,
       food: data.gameCtx.fome,
       pos_x: data.gameCtx.posicao.x,
@@ -417,6 +446,12 @@ MODO LEVE DE MEMÓRIA:
       bot.on('chat', (user, msg) => {
         if (user === bot.username) return;
         this.memory.recordInteraction(user, msg);
+        // Só mensagem de humano vira pedido destacado — bot obedecendo
+        // bot geraria loops e contaminaria a métrica de obediência.
+        if (!this.knownBotUsernames.has(user)) {
+          this.pendingRequest = { jogador: user, mensagem: msg, cyclesShown: 0 };
+          console.log(`📢 Pedido de jogador: ${user}: "${msg}"`);
+        }
       });
 
       bot.on('health', () => {
