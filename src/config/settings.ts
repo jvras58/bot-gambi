@@ -33,4 +33,12 @@ export const agentConfig = {
   /** Mantem apenas chunks proximos no cache local do Mineflayer. */
   chunkCacheRadius: parseInt(process.env.MINECRAFT_CHUNK_CACHE_RADIUS || '12', 10),
   worldPruneIntervalMs: 5_000,
+  /**
+   * Nicks (separados por vírgula) cujas mensagens de chat viram "pedido de
+   * jogador". Vazio = qualquer não-bot vira pedido (modo dev).
+   */
+  chatAdmins: (process.env.CHAT_ADMINS || embedded.chatAdmins || '')
+    .split(',')
+    .map((name) => name.trim().toLowerCase())
+    .filter(Boolean),
 };

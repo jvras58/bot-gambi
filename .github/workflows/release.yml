@@ -32,6 +32,7 @@ jobs:
           MINECRAFT_PORT: ${{ secrets.MINECRAFT_PORT || vars.MINECRAFT_PORT }}
           MINECRAFT_VERSION: ${{ secrets.MINECRAFT_VERSION || vars.MINECRAFT_VERSION }}
           BOT_AUTH: ${{ secrets.BOT_AUTH || vars.BOT_AUTH }}
+          CHAT_ADMINS: ${{ secrets.CHAT_ADMINS || vars.CHAT_ADMINS }}
         run: bun scripts/build.ts all
 
       - name: Empacotar

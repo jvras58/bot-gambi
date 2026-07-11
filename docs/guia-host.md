@@ -70,7 +70,7 @@ Como funciona por baixo:
 - O pedido fica em destaque no prompt do bot por **até 5 ciclos** (~15s) — se ele não atender nesse prazo, o pedido expira. Pedir de novo renova o prazo.
 - **Um pedido por vez**: uma mensagem nova substitui a anterior. Evite `colete madeira e depois me segue` — mande um, espere, mande o outro.
 - Atender ou não é decisão da LLM de cada bot — modelos diferentes obedecem em taxas diferentes (isso é uma das métricas do experimento, registrada no Supabase). A query pronta pra medir obediência está no [README, seção *Medindo obediência*](../README.md#medindo-obediência-aos-pedidos-de-chat).
-- Bots ignoram ordens de outros bots — só humanos são atendidos.
+- **Só o ADMIN comanda os bots**: os binários de release embutem o(s) nick(s) definidos em `CHAT_ADMINS` (secret/variable do repositório) — mensagens de qualquer outro jogador ou bot vão só pra "memória social" do bot, sem virar ordem. Isso evita bot obedecendo bot e mantém o estímulo do experimento controlado.
 
 ---
 

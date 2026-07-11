@@ -40,6 +40,18 @@ export class AgentLoop {
 
   /** Usernames dos outros bots da sala — chat deles não vira pedido prioritário. */
   private knownBotUsernames: Set<string>;
+
+  /**
+   * Com CHAT_ADMINS configurado, só admins comandam os bots (whitelist —
+   * imune a bots que entram na sala depois do startup). Sem configurar,
+   * cai no modo dev: qualquer não-bot conhecido vira pedido.
+   */
+  private isChatAdmin(user: string): boolean {
+    if (agentConfig.chatAdmins.length > 0) {
+      return agentConfig.chatAdmins.includes(user.toLowerCase());
+    }
+    return !this.knownBotUsernames.has(user);
+  }
   /** Último pedido de um jogador humano, destacado no prompt por até 5 ciclos. */
   private pendingRequest: { jogador: string; mensagem: string; cyclesShown: number } | null = null;
   /** Pedido incluído no prompt do ciclo atual (vai para o log do ciclo). */
@@ -84,6 +96,11 @@ export class AgentLoop {
   async start(): Promise<void> {
     console.log(`🧠 Agente ativado — ${this.participantNickname} [${this.modelName}]`);
     console.log(`📊 Session ID: ${this.sessionId}`);
+    if (agentConfig.chatAdmins.length > 0) {
+      console.log(`🔑 Admins de chat (comandam o bot): ${agentConfig.chatAdmins.join(', ')}`);
+    } else {
+      console.log('🔑 CHAT_ADMINS não configurado — qualquer jogador não-bot comanda o bot (modo dev)');
+    }
 
     await this.logger.logSession({
       id: this.sessionId,
@@ -449,15 +466,15 @@ MODO LEVE DE MEMÓRIA:
 
       bot.on('chat', (user, msg) => {
         if (user === bot.username) return;
-        // Humano: vai SÓ para o destaque (que expira em 3 ciclos). Se também
+        // Admin: vai SÓ para o destaque (que expira em 5 ciclos). Se também
         // entrasse na memória, o LLM continuaria "obedecendo" por até 15
         // ciclos depois do destaque expirar.
-        // Bot: vai só para a memória (interação social, nunca vira pedido).
-        if (this.knownBotUsernames.has(user)) {
-          this.memory.recordInteraction(user, msg);
-        } else {
+        // Demais (bots e outros jogadores): só memória — interação social.
+        if (this.isChatAdmin(user)) {
           this.pendingRequest = { jogador: user, mensagem: msg, cyclesShown: 0 };
           console.log(`📢 Pedido de jogador: ${user}: "${msg}"`);
+        } else {
+          this.memory.recordInteraction(user, msg);
         }
       });
 

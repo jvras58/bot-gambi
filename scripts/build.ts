@@ -62,6 +62,14 @@ if (botAuth) {
   defines.push('--define', `__EMBED_BOT_AUTH__=${JSON.stringify(botAuth)}`);
 }
 
+const chatAdmins = process.env.CHAT_ADMINS;
+if (chatAdmins) {
+  defines.push('--define', `__EMBED_CHAT_ADMINS__=${JSON.stringify(chatAdmins)}`);
+  console.log(`👑 Admins de chat embutidos: ${chatAdmins}`);
+} else {
+  console.log('⚠️  CHAT_ADMINS ausente — qualquer jogador não-bot poderá comandar os bots');
+}
+
 for (const name of targetNames) {
   const { triple, outfile } = TARGETS[name]!;
   console.log(`\n📦 Compilando ${name} (${triple}) → ${outfile}`);

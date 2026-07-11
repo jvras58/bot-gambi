@@ -83,7 +83,7 @@ minecraft-bot --room ABC123 --hub http://<IP-DO-HOST>:3000 --participant SEU-NOM
 
 O endereço do servidor Minecraft do experimento e as credenciais do Supabase já vêm embutidos no binário — dá pra sobrescrever com `--mc-host`/`--mc-port` ou variáveis de ambiente se precisar.
 
-> Os binários são publicados em [Releases](https://github.com/jvras58/bot-gambi/releases) pelo workflow `release.yml` a cada tag `v*`. Configure nos ajustes do repositório (secrets ou variables de Actions): `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MINECRAFT_HOST`, `MINECRAFT_PORT`, `MINECRAFT_VERSION` e `BOT_AUTH`.
+> Os binários são publicados em [Releases](https://github.com/jvras58/bot-gambi/releases) pelo workflow `release.yml` a cada tag `v*`. Configure nos ajustes do repositório (secrets ou variables de Actions): `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `MINECRAFT_HOST`, `MINECRAFT_PORT`, `MINECRAFT_VERSION`, `BOT_AUTH` e `CHAT_ADMINS` (nick de quem pode comandar os bots pelo chat).
 
 As seções abaixo são para quem vai **desenvolver o bot ou hospedar o experimento** (rodar hub + servidor Minecraft).
 
