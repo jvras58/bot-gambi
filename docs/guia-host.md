@@ -78,6 +78,17 @@ Como funciona por baixo:
 
 - [ ] Terminal do hub aberto e rodando (`gambi hub serve --port 3000 --mdns`)
 - [ ] Firewall liberado na porta 3000
-- [ ] Código da sala + IP compartilhados
+- [ ] **Todo mundo no MESMO Wi-Fi/SSID** (2,4 GHz e 5 GHz contam como redes separadas!)
+- [ ] Código da sala **desta execução** + IP compartilhados
 
-> Deu problema? Veja o [guia detalhado da LAN](rodar-experimento-lan.md#solução-de-problemas).
+## Solução de problemas
+
+| Sintoma | Causa / Solução |
+|---|---|
+| Participante: `Failed to reach hub` | 1) Ele usou `localhost` em vez do **IP do host** no `--hub`. 2) As máquinas não se enxergam na rede — veja a linha abaixo. |
+| As máquinas não se enxergam (nem `ping <IP-DO-HOST>` funciona) | **Isolamento do roteador.** Confira se todos estão no **mesmo SSID** — `FAMILIA_5G` e `FAMILIA` (2,4 GHz) são redes separadas em muitos roteadores. Se persistir, desligue o **"Isolamento de AP" / "Client Isolation"** no painel do roteador. **Plano B:** o host cria um hotspot Wi-Fi e todos conectam nele. |
+| Participante: `Room not found` | Boa notícia: o hub **respondeu** — só o código está velho. **Cada execução do host cria uma sala nova**; o código de ontem não vale hoje. Pegue o código atual no terminal do host (`Sala criada: XXXXXX`) ou liste com `gambi room list --hub http://localhost:3000`. |
+| Testar se o hub está alcançável (do participante) | Windows: `Test-NetConnection <IP-DO-HOST> -Port 3000` (importa o `TcpTestSucceeded: True`; ping pode falhar mesmo estando ok). Linux/macOS: `curl http://<IP-DO-HOST>:3000`. |
+| Bots em salas diferentes | O bot do host entrou na sala da execução anterior. Reinicie o fluxo do host, anote o código novo e passe **esse** pros participantes. |
+
+> Mais detalhes de rede e firewall: [guia detalhado da LAN](rodar-experimento-lan.md#solução-de-problemas).
