@@ -16,11 +16,29 @@ Você vai receber do host **2 informações**: o **código da sala** (ex.: `ABC1
   > (ex.: LM Studio: `--endpoint http://localhost:1234`). Veja a
   > [documentação do gambi](https://www.gambi.sh/guides/quickstart/).
 
-- **gambi** instalado:
+- **gambi** instalado — escolha UM jeito ([quickstart oficial](https://www.gambi.sh/guides/quickstart/)):
+
+  **Windows** (PowerShell):
+
+  ```powershell
+  irm https://raw.githubusercontent.com/arthurbm/gambi/main/scripts/install.ps1 | iex
+  ```
+
+  **Linux / macOS:**
+
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/arthurbm/gambi/main/scripts/install.sh | bash
+  ```
+
+  **Ou via npm/bun** (se já tiver Node ou Bun):
 
   ```bash
   npm install -g gambi
+  # ou
+  bun add -g gambi
   ```
+
+  Confira com `gambi --version` (abra um terminal novo se não for encontrado).
 
 ## 1. Instale o bot (uma linha, só na primeira vez)
 
@@ -69,6 +87,46 @@ O servidor de Minecraft e a coleta de métricas já vêm configurados dentro do 
 ## Para encerrar
 
 `Ctrl+C` nos dois terminais (bot e gambi).
+
+---
+
+## Atualizar para uma nova versão
+
+Não precisa desinstalar — o instalador **sempre baixa a versão mais recente** e sobrescreve a antiga. Feche o bot (`Ctrl+C`) e rode o mesmo comando do passo 1 de novo:
+
+**Windows** (PowerShell):
+
+```powershell
+powershell -c "irm https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.ps1 | iex"
+```
+
+**Linux / macOS:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jvras58/bot-gambi/main/install.sh | bash
+```
+
+> ⚠️ O bot precisa estar **fechado** durante a atualização (arquivo em uso não pode ser sobrescrito, principalmente no Windows). Na dúvida se sua versão está velha, rode o instalador — se já estiver atualizado, não muda nada.
+
+## Desinstalar
+
+**Windows** (PowerShell) — remove os arquivos e a entrada do PATH:
+
+```powershell
+$dir = "$env:LOCALAPPDATA\minecraft-bot\bin"
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\minecraft-bot"
+$p = [Environment]::GetEnvironmentVariable("Path", "User")
+[Environment]::SetEnvironmentVariable("Path", (($p -split ';' | Where-Object { $_ -and $_ -ne $dir }) -join ';'), "User")
+```
+
+**Linux / macOS** — remove os arquivos e a linha do PATH do seu shell:
+
+```bash
+rm -rf ~/.minecraft-bot
+sed -i.bak '/minecraft-bot/d' ~/.bashrc   # zsh: troque por ~/.zshrc
+```
+
+Abra um terminal novo depois, e pronto — não sobra nada (o bot não grava nada fora dessa pasta).
 
 ---
 

@@ -33,7 +33,7 @@ Write-Host ""
 Write-Host "Instalado em $InstallDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "Proximos passos:"
-Write-Host "  1. Instale o gambi (se ainda nao tiver): npm install -g gambi"
+Write-Host "  1. Instale o gambi (se ainda nao tiver): irm https://raw.githubusercontent.com/arthurbm/gambi/main/scripts/install.ps1 | iex"
 Write-Host "  2. Entre na sala:    gambi participant join --room <CODIGO> --model <MODELO> --hub http://<IP-DO-HOST>:3000"
 Write-Host "  3. Rode o bot:       minecraft-bot --room <CODIGO> --hub http://<IP-DO-HOST>:3000 --participant <SEU-NOME>"
 Write-Host "     (o servidor Minecraft do experimento ja vem configurado; use --mc-host para trocar)"
