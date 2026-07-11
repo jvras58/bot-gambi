@@ -50,8 +50,10 @@ gambi participant join --room ABC123 --participant-id SEU-NOME --model llama3.2:
 
 ## 3. Rode o bot (em OUTRO terminal)
 
+Use o **mesmo nome** do passo 2 em `--participant` (com vários participantes na sala, o bot precisa saber qual é o seu):
+
 ```bash
-minecraft-bot --room ABC123 --hub http://192.168.1.13:3000
+minecraft-bot --room ABC123 --hub http://192.168.1.13:3000 --participant SEU-NOME
 ```
 
 Pronto! 🎉 O bot entra no servidor de Minecraft com o seu nome e começa a jogar sozinho. Você vai ver os ciclos no terminal:
@@ -77,5 +79,6 @@ O servidor de Minecraft e a coleta de métricas já vêm configurados dentro do 
 | `Unable to connect` / `hub não respondeu` | Confira o IP com o host e se vocês estão na **mesma rede** (Wi-Fi). |
 | `Model 'xxx' not found` | O nome do modelo não bate — use o nome exato (no Ollama: `ollama list`; em outro provedor, o nome que ele expõe). |
 | `Nenhum participante online na sala` | O terminal do passo 2 fechou — rode o `gambi participant join` de novo e deixe aberto. |
+| `N participantes online — especifique qual usar` | Faltou o `--participant SEU-NOME` no comando do bot (o mesmo nome do passo 2). |
 | `minecraft-bot` não é reconhecido | Abra um terminal **novo** (o instalador acabou de mexer no PATH). |
 | Código de sala inválido | O código muda a cada experimento — confirme com o host o código de **hoje**. |

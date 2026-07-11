@@ -77,8 +77,8 @@ Depois, cada participante roda só isto (com o código da sala e o IP que o host
 # 1. Entrar na sala Gambi com sua LLM
 gambi participant join --room ABC123 --model llama3.2:latest --hub http://<IP-DO-HOST>:3000
 
-# 2. Rodar o bot
-minecraft-bot --room ABC123 --hub http://<IP-DO-HOST>:3000
+# 2. Rodar o bot (mesmo nome usado no join)
+minecraft-bot --room ABC123 --hub http://<IP-DO-HOST>:3000 --participant SEU-NOME
 ```
 
 O endereço do servidor Minecraft do experimento e as credenciais do Supabase já vêm embutidos no binário — dá pra sobrescrever com `--mc-host`/`--mc-port` ou variáveis de ambiente se precisar.

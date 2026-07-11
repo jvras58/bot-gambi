@@ -111,8 +111,8 @@ Com o binário instalado, são **dois terminais** por máquina — um pro `gambi
 # Terminal 1 — entrar na sala do host com sua LLM (fica rodando)
 gambi participant join --room ABC123 --participant-id maria-3 --model qwen2 --hub http://192.168.1.13:3000
 
-# Terminal 2 — rodar o bot
-minecraft-bot --room ABC123 --hub http://192.168.1.13:3000
+# Terminal 2 — rodar o bot (mesmo nome do join)
+minecraft-bot --room ABC123 --hub http://192.168.1.13:3000 --participant maria-3
 ```
 
 O servidor Minecraft e a coleta de métricas (Supabase) já vêm embutidos no binário — não precisa configurar nada além do código da sala e do IP do host. Se precisar apontar pra outro servidor, use `--mc-host`/`--mc-port`.
@@ -171,7 +171,7 @@ Get-Content .tmp\memory.log -Wait
 | Papel | Cria sala? | Sobe hub? | Comandos |
 |---|---|---|---|
 | **Host** | sim (auto) | sim | `scripts\run-local.bat -p joao-1 -m llama3.2:latest` (Linux/macOS: `bun run local --`) |
-| **Participante** | não (usa `--room`) | não (usa o do host) | `gambi participant join --room ABC123 --participant-id maria-3 --model qwen2 --hub http://192.168.1.13:3000` e depois `minecraft-bot --room ABC123 --hub http://192.168.1.13:3000` |
+| **Participante** | não (usa `--room`) | não (usa o do host) | `gambi participant join --room ABC123 --participant-id maria-3 --model qwen2 --hub http://192.168.1.13:3000` e depois `minecraft-bot --room ABC123 --hub http://192.168.1.13:3000 --participant maria-3` |
 
 ---
 
