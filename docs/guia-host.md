@@ -53,6 +53,25 @@ Guia:  https://github.com/jvras58/bot-gambi/blob/main/docs/guia-participante.md
 
 Igual a qualquer participante — siga o [guia do participante](guia-participante.md) usando `http://localhost:3000` como hub.
 
+## 6. Dando ordens aos bots pelo chat
+
+Os bots leem o chat e tentam atender pedidos de jogadores humanos. Eles **não entendem comandos complexos** — a melhor maneira é usar frases curtas com o **verbo da ação**:
+
+| Escreva no chat | O bot faz |
+|---|---|
+| `colete madeira` | COLETAR |
+| `me segue` | SEGUIR |
+| `pare` | PARAR |
+| `pule` | PULAR |
+| `fale oi` | FALAR |
+
+Como funciona por baixo:
+
+- O pedido fica em destaque no prompt do bot por **até 5 ciclos** (~15s) — se ele não atender nesse prazo, o pedido expira. Pedir de novo renova o prazo.
+- **Um pedido por vez**: uma mensagem nova substitui a anterior. Evite `colete madeira e depois me segue` — mande um, espere, mande o outro.
+- Atender ou não é decisão da LLM de cada bot — modelos diferentes obedecem em taxas diferentes (isso é uma das métricas do experimento, registrada no Supabase). A query pronta pra medir obediência está no [README, seção *Medindo obediência*](../README.md#medindo-obediência-aos-pedidos-de-chat).
+- Bots ignoram ordens de outros bots — só humanos são atendidos.
+
 ---
 
 ✅ **Checklist antes de liberar a galera:**

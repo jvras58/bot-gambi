@@ -40,11 +40,11 @@ export class AgentLoop {
 
   /** Usernames dos outros bots da sala — chat deles não vira pedido prioritário. */
   private knownBotUsernames: Set<string>;
-  /** Último pedido de um jogador humano, destacado no prompt por até 3 ciclos. */
+  /** Último pedido de um jogador humano, destacado no prompt por até 5 ciclos. */
   private pendingRequest: { jogador: string; mensagem: string; cyclesShown: number } | null = null;
   /** Pedido incluído no prompt do ciclo atual (vai para o log do ciclo). */
   private shownRequest: { jogador: string; mensagem: string } | null = null;
-  private static readonly REQUEST_MAX_CYCLES = 3;
+  private static readonly REQUEST_MAX_CYCLES = 5;
 
   constructor(botManager: BotManager, llm: GambiLLM, options: {
     roomCode: string;
@@ -222,6 +222,10 @@ export class AgentLoop {
 
   private buildMessages(contexto: string): ChatMessage[] {
     if (this.pendingRequest && this.pendingRequest.cyclesShown >= AgentLoop.REQUEST_MAX_CYCLES) {
+      // Encerra na memória para o LLM não voltar a atender o mesmo pedido.
+      this.memory.recordEvent(
+        `Pedido de ${this.pendingRequest.jogador} ("${this.pendingRequest.mensagem}") já foi tratado — não repita`,
+      );
       this.pendingRequest = null;
     }
     let pedido = '';
@@ -445,10 +449,13 @@ MODO LEVE DE MEMÓRIA:
 
       bot.on('chat', (user, msg) => {
         if (user === bot.username) return;
-        this.memory.recordInteraction(user, msg);
-        // Só mensagem de humano vira pedido destacado — bot obedecendo
-        // bot geraria loops e contaminaria a métrica de obediência.
-        if (!this.knownBotUsernames.has(user)) {
+        // Humano: vai SÓ para o destaque (que expira em 3 ciclos). Se também
+        // entrasse na memória, o LLM continuaria "obedecendo" por até 15
+        // ciclos depois do destaque expirar.
+        // Bot: vai só para a memória (interação social, nunca vira pedido).
+        if (this.knownBotUsernames.has(user)) {
+          this.memory.recordInteraction(user, msg);
+        } else {
           this.pendingRequest = { jogador: user, mensagem: msg, cyclesShown: 0 };
           console.log(`📢 Pedido de jogador: ${user}: "${msg}"`);
         }

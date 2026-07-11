@@ -92,7 +92,7 @@ CREATE TABLE cycle_responses (
 
   -- ─── Pedido de jogador via chat ──────────────────────────
   -- Preenchidos quando havia um "PEDIDO DE JOGADOR" em destaque no
-  -- prompt deste ciclo (mensagem de humano no chat, dura até 3 ciclos).
+  -- prompt deste ciclo (mensagem de humano no chat, dura até 5 ciclos).
   -- Base para métrica de obediência: pedido ativo × ação escolhida.
   chat_request text,
   chat_request_player text,

@@ -259,6 +259,34 @@ Opções:
 | --- | --- |
 | `v_latency_by_setup` | Latência média/p50/p95 por modelo × GPU |
 | `v_fastest_per_cycle` | Qual setup teve menor latência em cada ciclo |
+| `v_session_summary` | Resumo por sessão (latência média, % JSON válido, % sucesso) |
+| `v_chat_requests` | Ciclos com pedido de jogador ativo (pedido × ação escolhida) |
+
+### Medindo obediência aos pedidos de chat
+
+⚠️ **`action_success` não mede obediência** (e não deve): ele diz se a ação escolhida executou sem erro — `NADA` sempre "dá certo". A obediência se mede na análise, comparando pedido × ação. Como os pedidos são do experimentador (estímulo controlado), dá pra automatizar com um mapeamento de palavra-chave no SQL:
+
+```sql
+WITH pedidos AS (
+  SELECT *,
+    CASE
+      WHEN chat_request ILIKE '%segu%'                                    THEN 'SEGUIR'
+      WHEN chat_request ILIKE '%colet%' OR chat_request ILIKE '%madeira%' THEN 'COLETAR'
+      WHEN chat_request ILIKE '%pare%'  OR chat_request ILIKE '%para %'   THEN 'PARAR'
+      WHEN chat_request ILIKE '%fale%'  OR chat_request ILIKE '%diga%'    THEN 'FALAR'
+      WHEN chat_request ILIKE '%pule%'                                    THEN 'PULAR'
+      WHEN chat_request ILIKE '%ataq%'                                    THEN 'ATACAR'
+    END AS acao_esperada
+  FROM v_chat_requests
+)
+SELECT model_name, chat_request,
+  BOOL_OR(action = acao_esperada) AS obedeceu,
+  COUNT(*)                        AS ciclos_com_pedido
+FROM pedidos
+GROUP BY session_id, model_name, chat_request;
+```
+
+> 💡 Dica que torna isso confiável: nos testes, use comandos com o **verbo da ação** ("colete madeira", "me segue", "pare") — aí o mapeamento nunca erra. Veja a seção *Dando ordens aos bots* no [guia do host](docs/guia-host.md).
 
 ## Arquitetura
 
