@@ -1,0 +1,36 @@
+modelo,erro,ocorrencias
+smollm2:135m,Failed after 3 attempts. Last error: Bad Gateway,36
+qwen2.5:0.5b,[ação] Timeout após 12000ms,16
+qwen3.5:latest,Failed after 3 attempts. Last error: Conflict,13
+qwen3.5:2b,Failed after 3 attempts. Last error: Service Unavailable,11
+granite4.1:3b,Failed after 3 attempts. Last error: Service Unavailable,9
+gemma4:12b,Failed after 3 attempts. Last error: Service Unavailable,4
+granite4.1:8b,[ação] Jogador jvras58 não encontrado ou fora do alcance,4
+gemma3:4b,[ação] Timeout após 12000ms,4
+llama3.2:latest,[ação] Jogador jvras58 não encontrado ou fora do alcance,3
+gemma3:1b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 4->4, drops perto 0)",3
+qwen2.5:0.5b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 1->1, drops perto 0)",3
+qwen2.5:0.5b,[ação] Jogador jvras58 não encontrado ou fora do alcance,2
+gemma3:4b,[ação] Jogador GREC não encontrado ou fora do alcance,2
+gemma3:1b,[ação] Timeout após 12000ms,2
+gemma3:4b,[ação] Jogador jvras58 não encontrado ou fora do alcance,2
+granite4.1:3b,[ação] Jogador jvras58 não encontrado ou fora do alcance,2
+gemma3:1b,[ação] Took to long to decide path to goal!,2
+granite4.1:8b,[ação] Timeout após 12000ms,2
+qwen2.5:0.5b,"[ação] Minerei oak_log mas o drop não chegou ao inventário (inv 1->1, drops perto 0)",2
+qwen3.5:latest,Timeout após 120000ms,2
+ornith:9b,Timeout após 120000ms,1
+ornith:9b,Failed after 3 attempts. Last error: Conflict,1
+gemma3:1b,[ação] Digging aborted,1
+gemma3:4b,[ação] Jogador almir não encontrado ou fora do alcance,1
+llama3.2:latest,[ação] Jogador grec não encontrado ou fora do alcance,1
+gemma3:1b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 27->27, drops perto 0)",1
+llama3.2:latest,"[ação] Minerei pink_petals mas o drop não chegou ao inventário (inv 60->60, drops perto 0)",1
+qwen2.5:0.5b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 0->0, drops perto 0)",1
+gemma3:1b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 0->0, drops perto 0)",1
+granite4.1:3b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 1->1, drops perto 0)",1
+gemma3:4b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 0->0, drops perto 0)",1
+qwen2.5:0.5b,"[ação] Minerei pink_petals mas o drop não chegou ao inventário (inv 1->1, drops perto 0)",1
+gemma3:1b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 6->6, drops perto 0)",1
+gemma3:1b,"[ação] Minerei grass_block mas o drop não chegou ao inventário (inv 9->8, drops perto 0)",1
+qwen2.5:0.5b,Failed after 3 attempts. Last error: Bad Gateway,1

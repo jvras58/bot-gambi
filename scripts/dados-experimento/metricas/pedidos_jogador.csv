@@ -1,0 +1,268 @@
+modelo,session_id,ciclo,jogador,pedido,acao,acao_sucesso
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,49,jvras58,me segue,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,25,jvras58,me segue,EXPLORAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,43,jvras58,me segue,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,50,jvras58,me segue,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,51,jvras58,me segue,FALAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,52,jvras58,me segue,COLETAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,26,jvras58,me segue,FALAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,25,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,44,jvras58,me segue,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,53,jvras58,me segue,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,27,jvras58,me segue,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,28,jvras58,me segue,ATACAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,26,jvras58,me segue,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,29,jvras58,me segue,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,27,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,45,jvras58,me segue,,
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,44,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,59,jvras58,me segue,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,28,jvras58,me segue,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,13,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,46,jvras58,me segue,,
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,11,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,60,jvras58,me segue,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,61,jvras58,me segue,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,62,jvras58,me segue,ANDAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,32,jvras58,me segue,SEGUIR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,33,jvras58,me segue,FALAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,29,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,47,jvras58,me segue,,
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,45,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,63,jvras58,me segue,OLHAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,34,jvras58,me segue,SEGUIR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,35,jvras58,me segue,FALAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,48,jvras58,me segue,OLHAR,true
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,12,jvras58,me segue,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,36,jvras58,me segue,EXPLORAR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,20,jvras58,me segue,SEGUIR,false
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,30,jvras58,me segue,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,14,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,49,jvras58,me segue,COLETAR,true
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,13,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,70,jvras58,me segue grec,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,31,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,50,jvras58,me segue,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,4,jvras58,me segue grec,FALAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,5,jvras58,me segue grec,SEGUIR,false
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,46,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,71,jvras58,me segue grec,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,39,jvras58,me segue grec,FALAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,32,jvras58,me segue grec,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,51,jvras58,me segue grec,PARAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,6,jvras58,me segue grec,SEGUIR,false
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,14,jvras58,me segue grec,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,72,jvras58,me segue grec,COLETAR,false
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,73,jvras58,me segue grec,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,40,jvras58,me segue grec,COLETAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,41,jvras58,me segue grec,SEGUIR,false
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,33,jvras58,me segue grec,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,15,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,52,jvras58,me segue grec,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,7,jvras58,me segue grec,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,8,jvras58,me segue grec,COLETAR,true
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,15,jvras58,me segue grec,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,74,jvras58,me segue grec,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,42,jvras58,me segue grec,FALAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,43,jvras58,me segue grec,SEGUIR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,34,jvras58,me segue grec,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,53,jvras58,me segue grec,COLETAR,true
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,47,jvras58,me segue grec,,
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,21,jvras58,me segue,SEGUIR,false
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,16,jvras58,me segue grec,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,54,jvras58,me segue grec,FALAR,true
+gemma4:12b,ad447604-d352-4ce9-93ec-6cb8b1fec0d7,16,jvras58,me segue grec,,
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,21,jvras58,me segue,,
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,35,jvras58,me segue grec,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,84,jvras58,me segue,FALAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,48,jvras58,me segue,FALAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,36,jvras58,me segue grec,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,55,jvras58,me segue grec,COLETAR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,15,jvras58,me segue,SEGUIR,false
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,48,jvras58,me segue grec,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,85,jvras58,me segue,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,49,jvras58,me segue,SEGUIR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,37,jvras58,me segue,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,17,jvras58,me segue grec,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,16,jvras58,me segue,ANDAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,17,jvras58,me segue,PARAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,86,jvras58,me segue,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,87,jvras58,me segue,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,88,jvras58,me segue,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,50,jvras58,me segue,FALAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,51,jvras58,me segue,COLETAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,38,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,56,jvras58,me segue,COLETAR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,18,jvras58,me segue,PARAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,19,jvras58,me segue,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,89,jvras58,me segue,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,90,jvras58,me segue,COLETAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,52,jvras58,me segue,OLHAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,53,jvras58,me segue,SEGUIR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,39,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,57,jvras58,me segue,OLHAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,20,jvras58,me segue,PARAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,21,jvras58,me segue,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,91,jvras58,me segue,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,92,jvras58,me segue,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,93,jvras58,me segue,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,54,jvras58,me segue,SEGUIR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,22,jvras58,me segue grec,PARAR,true
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,18,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,58,jvras58,me segue,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,22,jvras58,me segue,PARAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,23,jvras58,me segue,SEGUIR,true
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,49,jvras58,me segue,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,55,jvras58,me segue,OLHAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,56,jvras58,me segue,SEGUIR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,2,jvras58,me segue,SEGUIR,false
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,40,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,59,jvras58,me segue,COLETAR,true
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,22,jvras58,me segue grec,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,57,jvras58,me segue,OLHAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,41,jvras58,me segue,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,3,jvras58,me segue,SEGUIR,false
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,42,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,60,jvras58,me segue,ANDAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,61,jvras58,me segue,FALAR,true
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,50,jvras58,me segue,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,4,jvras58,me segue,ANDAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,43,jvras58,me segue,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,19,jvras58,me segue,,
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,12,jvras58,GREC coleta madeira,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,13,jvras58,GREC coleta madeira,ANDAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,62,jvras58,me segue,COLETAR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,31,jvras58,GREC coleta madeira,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,32,jvras58,GREC coleta madeira,OLHAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,107,jvras58,GREC coleta madeira,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,108,jvras58,GREC coleta madeira,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,109,jvras58,GREC coleta madeira,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,63,jvras58,GREC coleta madeira,OLHAR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,23,jvras58,me segue,SEGUIR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,14,jvras58,GREC coleta madeira,EXPLORAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,5,jvras58,me segue,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,33,jvras58,GREC coleta madeira,COLETAR,true
+qwen3.5:2b,7d5aa203-32d1-421e-b15f-70018ad08c80,51,jvras58,me segue,,
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,110,jvras58,GREC coleta madeira,OLHAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,64,jvras58,GREC coleta madeira,COLETAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,65,jvras58,GREC coleta madeira,OLHAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,15,jvras58,GREC coleta madeira,COLETAR,false
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,16,jvras58,GREC coleta madeira,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,45,jvras58,GREC coleta madeira,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,63,jvras58,GREC coleta madeira,COLETAR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,34,jvras58,GREC coleta madeira,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,35,jvras58,GREC coleta madeira,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,111,jvras58,GREC coleta madeira,COLETAR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,66,jvras58,GREC coleta madeira,SEGUIR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,67,jvras58,GREC coleta madeira,OLHAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,6,jvras58,GREC coleta madeira,COLETAR,false
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,46,jvras58,GREC coleta madeira,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,20,jvras58,me segue,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,64,jvras58,GREC coleta madeira,PARAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,47,jvras58,GREC coleta madeira,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,65,jvras58,GREC coleta madeira,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,66,jvras58,GREC coleta madeira,,
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,23,jvras58,me segue,,
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,24,jvras58,GREC coleta madeira,COLETAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,7,jvras58,GREC coleta madeira,OLHAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,48,jvras58,GREC coleta madeira,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,8,jvras58,GREC coleta madeira,COLETAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,49,jvras58,GREC coleta madeira,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,67,jvras58,GREC coleta madeira,COLETAR,false
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,21,jvras58,GREC coleta madeira,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,9,jvras58,GREC coleta madeira,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,130,jvras58,calegario pegue madeira,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,38,jvras58,calegario pegue madeira,EXPLORAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,10,jvras58,GREC coleta madeira,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,131,jvras58,calegario pegue madeira,EXPLORAR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,25,jvras58,GREC coleta madeira,COLETAR,false
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,39,jvras58,calegario pegue madeira,COLETAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,40,jvras58,calegario pegue madeira,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,53,jvras58,calegario pegue madeira,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,22,jvras58,GREC coleta madeira,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,71,jvras58,calegario pegue madeira,FALAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,46,jvras58,calegario pegue madeira,COLETAR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,78,jvras58,calegario pegue madeira,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,132,jvras58,calegario pegue madeira,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,133,jvras58,calegario pegue bife,ANDAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,134,jvras58,calegario pegue bife,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,41,jvras58,calegario pegue madeira,COLETAR,false
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,42,jvras58,calegario pegue bife,EXPLORAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,11,jvras58,calegario pegue madeira,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,54,jvras58,calegario pegue bife,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,72,jvras58,calegario pegue bife,COLETAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,47,jvras58,calegario pegue bife,OLHAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,135,jvras58,calegario pegue bife,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,136,jvras58,calegario pegue bife,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,137,jvras58,calegario pegue bife,EXPLORAR,true
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,24,jvras58,GREC coleta madeira,,
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,79,jvras58,calegario pegue bife,COLETAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,43,jvras58,calegario pegue bife,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,44,jvras58,calegario pegue bife,ANDAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,45,jvras58,calegario pegue bife,ANDAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,46,jvras58,calegario pegue bife,PARAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,73,jvras58,calegario pegue bife,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,48,jvras58,calegario pegue bife,COLETAR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,49,jvras58,calegario pegue bife,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,80,jvras58,calegario pegue bife,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,81,jvras58,calegario pegue bife,EXPLORAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,55,jvras58,calegario pegue bife,,
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,23,jvras58,calegario pegue bife,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,50,jvras58,calegario pegue bife,EXPLORAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,51,jvras58,calegario pegue bife,FALAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,82,jvras58,calegario pegue bife,OLHAR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,26,jvras58,calegario pegue madeira,OLHAR,true
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,4,jvras58,calegario pegue bife,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,12,jvras58,calegario pegue bife,COLETAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,56,jvras58,calegario pegue bife,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,74,jvras58,calegario pegue bife,COLETAR,false
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,144,jvras58,GREC va seguir sua vida,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,83,jvras58,calegario pegue bife,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,53,jvras58,GREC va seguir sua vida,EXPLORAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,13,jvras58,calegario pegue bife,ANDAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,57,jvras58,calegario pegue bife,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,75,jvras58,calegario pegue bife,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,54,jvras58,GREC va seguir sua vida,SEGUIR,false
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,55,jvras58,GREC va seguir sua vida,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,145,jvras58,GREC va seguir sua vida,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,146,jvras58,GREC va seguir sua vida,COLETAR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,85,jvras58,GREC va seguir sua vida,ANDAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,54,jvras58,GREC va seguir sua vida,EXPLORAR,true
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,55,jvras58,GREC va seguir sua vida,,
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,56,jvras58,GREC va seguir sua vida,PARAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,58,jvras58,GREC va seguir sua vida,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,76,jvras58,GREC va seguir sua vida,OLHAR,true
+qwen3.5:2b,db90f8b2-3abf-456b-ab45-a3f39b0b4725,24,jvras58,calegario pegue bife,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,56,jvras58,GREC va seguir sua vida,EXPLORAR,true
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,57,jvras58,GREC va seguir sua vida,COLETAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,147,jvras58,GREC va seguir sua vida,EXPLORAR,true
+gemma3:1b,7145e8bf-c9f1-4528-b540-e77c9ca6e913,148,jvras58,GREC va seguir sua vida,ANDAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,86,jvras58,GREC va seguir sua vida,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,87,jvras58,GREC va seguir sua vida,EXPLORAR,true
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,5,jvras58,calegario pegue bife,,
+gemma3:1b,6201df94-01b7-4156-b6e9-8c284a6d8c49,57,jvras58,GREC va seguir sua vida,EXPLORAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,14,jvras58,GREC va seguir sua vida,SEGUIR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,59,jvras58,GREC va seguir sua vida,,
+gemma3:4b,8cb2318e-2260-44e8-9689-0dcbc2ef002d,58,jvras58,GREC va seguir sua vida,EXPLORAR,true
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,88,jvras58,GREC va seguir sua vida,PARAR,true
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,77,jvras58,GREC va seguir sua vida,COLETAR,false
+llama3.2:latest,4397fbb8-bb7e-43a3-9630-ebb1635c2b6c,89,jvras58,GREC va seguir sua vida,COLETAR,true
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,6,jvras58,GREC va seguir sua vida,,
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,60,jvras58,GREC va seguir sua vida,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,78,jvras58,GREC va seguir sua vida,COLETAR,false
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,25,jvras58,calegario pegue bife,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,15,jvras58,GREC va seguir sua vida,ANDAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,61,jvras58,GREC va seguir sua vida,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,79,jvras58,GREC va seguir sua vida,ANDAR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,16,jvras58,GREC va seguir sua vida,ANDAR,true
+qwen3.5:2b,bfc93acf-ffff-41a0-a21b-98c85059446c,62,jvras58,GREC va seguir sua vida,,
+qwen2.5:0.5b,c1d4bc04-29ce-4080-bd3b-e88858a5997f,80,jvras58,GREC va seguir sua vida,COLETAR,false
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,27,jvras58,calegario pegue bife,COLETAR,false
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,7,jvras58,GREC va seguir sua vida,,
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,17,jvras58,GREC va seguir sua vida,SEGUIR,true
+granite4.1:3b,97831186-1cfa-4c85-85e3-959bbaf70e38,18,jvras58,GREC va seguir sua vida,ANDAR,true
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,28,jvras58,GREC va seguir sua vida,SEGUIR,false
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,8,jvras58,GREC va seguir sua vida,,
+qwen3.5:4b,c9199107-2e81-4101-ab79-a3d68e019c52,26,jvras58,GREC va seguir sua vida,,
+qwen3.5:2b,199412e4-3929-41f3-b292-7c82f2e03995,9,jvras58,GREC va seguir sua vida,,
+granite4.1:8b,1ad2f5ee-dd6c-47ef-839a-477168763c52,29,jvras58,GREC va seguir sua vida,SEGUIR,false
